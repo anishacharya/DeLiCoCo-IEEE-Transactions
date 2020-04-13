@@ -2,7 +2,7 @@
 lexsub/embedding/*
 glove.*/
 glove.*.zip*
-data/
+example/data/
 .idea/
 *.DS_Store
 **/__pycache__/**
