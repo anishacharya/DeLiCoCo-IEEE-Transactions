@@ -3,11 +3,12 @@ import argparse
 from sklearn.datasets import load_svmlight_file
 import time
 
+
 def _parse_args():
     parser = argparse.ArgumentParser(description='get_data_helper.py')
-    parser.add_argument('--i', type=str, default='data input file',
+    parser.add_argument('--i', type=str, default='data/rcv1_test.binary.bz2',
                         help='Pass data-set path')
-    parser.add_argument('--o', type=str, default='data pickle dump file',
+    parser.add_argument('--o', type=str, default='data/rcv1_test.pickle',
                         help='Pass output file path')
     args = parser.parse_args()
     return args
