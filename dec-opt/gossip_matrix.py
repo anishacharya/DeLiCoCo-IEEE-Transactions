@@ -4,33 +4,34 @@ import networkx
 
 class GossipMatrix:
     def __init__(self, topology, n_cores):
-        self.n_cores = n_cores
+        self.nodes = n_cores
         self.topology = topology
+        self.W = self._get_gossip_matrix(topology=self.topology, nodes=self.nodes)
 
     # noinspection PyPep8Naming
     @staticmethod
-    def _get_gossip_matrix(topology, n_cores):
+    def _get_gossip_matrix(topology, nodes):
         if topology == 'ring':
-            W = np.zeros(shape=(n_cores, n_cores))
-            value = 1. / 3 if n_cores >= 3 else 1. / 2
+            W = np.zeros(shape=(nodes, nodes))
+            value = 1. / 3 if nodes >= 3 else 1. / 2
             np.fill_diagonal(W, value)
             np.fill_diagonal(W[1:], value, wrap=False)
             np.fill_diagonal(W[:, 1:], value, wrap=False)
-            W[0, n_cores - 1] = value
-            W[n_cores - 1, 0] = value
+            W[0, nodes - 1] = value
+            W[nodes - 1, 0] = value
             return W
         elif topology == 'centralized':
-            W = np.ones((n_cores, n_cores), dtype=np.float64) / n_cores
+            W = np.ones((nodes, nodes), dtype=np.float64) / nodes
             return W
         elif topology == 'disconnected':
-            W = np.eye(n_cores)
+            W = np.eye(nodes)
             return W
         elif topology == 'torus':
             print('torus topology!')
             assert topology == 'torus'
-            assert int(np.sqrt(n_cores)) ** 2 == n_cores
-            G = networkx.generators.lattice.grid_2d_graph(int(np.sqrt(n_cores)),
-                                                          int(np.sqrt(n_cores)), periodic=True)
+            assert int(np.sqrt(nodes)) ** 2 == nodes
+            G = networkx.generators.lattice.grid_2d_graph(int(np.sqrt(nodes)),
+                                                          int(np.sqrt(nodes)), periodic=True)
             W = networkx.adjacency_matrix(G).toarray()
             for i in range(0, W.shape[0]):
                 W[i][i] = 1
@@ -38,3 +39,8 @@ class GossipMatrix:
             return W
         else:
             raise NotImplementedError
+
+
+if __name__ == '__main__':
+    gossip_matrix_1 = GossipMatrix(topology='ring', n_cores=10).W
+    gossip_matrix_2 = GossipMatrix(topology='centralized', n_cores=10).W

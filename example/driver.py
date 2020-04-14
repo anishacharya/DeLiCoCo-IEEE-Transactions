@@ -16,6 +16,10 @@ def _parse_args():
     return args
 
 
+def get_data():
+    raise NotImplementedError
+
+
 def run_experiment():
     raise NotImplementedError
 
