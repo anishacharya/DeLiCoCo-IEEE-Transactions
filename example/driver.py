@@ -3,20 +3,19 @@ import multiprocessing as mp
 import os
 import pickle
 from sklearn.datasets import load_svmlight_file
-
 import numpy as np
 
 
 def _parse_args():
     parser = argparse.ArgumentParser(description='driver.py')
-    parser.add_argument('--i', type=str, default='data/epsilon_normalized.pickle',
-                        help='Pass input file path')
+    parser.add_argument('--d', type=str, default='mnist',
+                        help='Pass data-set')
 
     args = parser.parse_args()
     return args
 
 
-def get_data():
+def get_data(data_set: str):
     raise NotImplementedError
 
 
