@@ -5,6 +5,8 @@ import pickle
 from sklearn.datasets import load_svmlight_file
 import numpy as np
 
+from dec_opt.gossip_matrix import GossipMatrix
+
 
 def _parse_args():
     parser = argparse.ArgumentParser(description='driver.py')

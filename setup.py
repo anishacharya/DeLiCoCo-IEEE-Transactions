@@ -4,8 +4,8 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="decentralized_optimization",  # Replace with your own username
-    version="0.0.1",
+    name="decopt",  # Replace with your own username
+    version="0.0.2",
     author="Anish Acharya",
     author_email="anishacharya@utexas.edu",
     description="State of the art decentralized optimization library",
