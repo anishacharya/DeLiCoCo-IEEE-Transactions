@@ -10,16 +10,13 @@ class DecGD:
         self.A = feature
         self.y = target
         self.param = hyper_param
-        self._estimation()
-
-    def _estimation(self):
 
         # initialize x_hat, x_estimate  Ax = y is the problem we are solving
         # -------------------------------------------------------------------
-        losses = np.zeros(self.param.epochs + 1)
-        num_samples, num_features = self.A.shape
+        self.losses = np.zeros(self.param.epochs + 1)
+        self.num_samples, self.num_features = self.A.shape
 
-        self.x = np.random.normal(0, INIT_WEIGHT_STD, size=(num_features,))
+        self.x = np.random.normal(0, INIT_WEIGHT_STD, size=(self.num_features,))
         self.x = np.tile(self.x, (self.param.n_cores, 1)).T
 
         self.x_estimate = np.copy(self.x)
@@ -27,13 +24,21 @@ class DecGD:
 
         # Now Distribute the Data among machines
         # ----------------------------------------
-        num_samples_per_machine = num_samples // self.param.n_cores
-        all_indexes = np.arange(num_samples)
+        self.data_partition_ix = self._distribute_data()
+
+    def _distribute_data(self):
+        data_partition_ix = []
+        num_samples_per_machine = self.num_samples // self.param.n_cores
+        all_indexes = np.arange(self.num_samples)
         np.random.shuffle(all_indexes)
-        indices = []
-        for machine in range(0, p.n_cores - 1):
-            indices += [all_indexes[num_samples_per_machine * machine: num_samples_per_machine * (machine + 1)]]
-        indices += [all_indexes[num_samples_per_machine * (self.param.n_cores - 1):]]
-        print("length of indices:", len(indices))
-        print("length of last machine indices:", len(indices[-1]))
+
+        for machine in range(0, self.param.n_cores - 1):
+            data_partition_ix += [all_indexes[num_samples_per_machine * machine: num_samples_per_machine * (machine + 1)]]
+        # put the rest in the last machine
+        data_partition_ix += [all_indexes[num_samples_per_machine * (self.param.n_cores - 1):]]
+        print("All but last machine has {} data points".format(num_samples_per_machine))
+        print("length of last machine indices:", len(data_partition_ix[-1]))
+        return data_partition_ix
+
+
 
