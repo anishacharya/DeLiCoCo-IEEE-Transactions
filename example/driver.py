@@ -14,7 +14,7 @@ def _parse_args():
                         help='Pass data-set')
     parser.add_argument('--r', type=str, default=os.path.join(curr_dir, './data/'),
                         help='Pass data root')
-    parser.add_argument('n_proc', type=int, default=5)
+    parser.add_argument('--n_proc', type=int, default=5)
     parser.add_argument('--n_cores', type=int, default=5)
     parser.add_argument('--epochs', type=int, default=10)
 
@@ -40,7 +40,8 @@ if __name__ == '__main__':
     print('Time taken to load Data {} sec'.format(time.time() - t0))
 
     """ Run Experiment """
-    dec_gd = DecGD(feature=data_reader.A_train, target=data_reader.y_train, hyper_param=args)
+    dec_gd = DecGD(feature=data_reader.A_train[0:10, :], target=data_reader.y_train[0:10, :], hyper_param=args)
+
 
 
 

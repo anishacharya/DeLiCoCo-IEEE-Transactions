@@ -2,6 +2,7 @@ import numpy as np
 
 INIT_WEIGHT_STD = 0.01
 LOSS_PER_EPOCH = 10
+np.random.seed(1)
 
 
 class DecGD:
@@ -9,6 +10,7 @@ class DecGD:
         self.A = feature
         self.y = target
         self.param = hyper_param
+        self._estimation()
 
     def _estimation(self):
 
@@ -25,3 +27,13 @@ class DecGD:
 
         # Now Distribute the Data among machines
         # ----------------------------------------
+        num_samples_per_machine = num_samples // self.param.n_cores
+        all_indexes = np.arange(num_samples)
+        np.random.shuffle(all_indexes)
+        indices = []
+        for machine in range(0, p.n_cores - 1):
+            indices += [all_indexes[num_samples_per_machine * machine: num_samples_per_machine * (machine + 1)]]
+        indices += [all_indexes[num_samples_per_machine * (self.param.n_cores - 1):]]
+        print("length of indices:", len(indices))
+        print("length of last machine indices:", len(indices[-1]))
+
