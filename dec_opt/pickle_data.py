@@ -5,7 +5,7 @@ import time
 
 
 def _parse_args():
-    parser = argparse.ArgumentParser(description='get_data_helper.py')
+    parser = argparse.ArgumentParser(description='pickle_data.py')
     parser.add_argument('--i', type=str, default='data/rcv1_test.binary.bz2',
                         help='Pass data-set path')
     parser.add_argument('--o', type=str, default='data/rcv1_test.pickle',
