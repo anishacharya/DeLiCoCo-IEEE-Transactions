@@ -8,26 +8,24 @@ class LogisticRegression:
         self.x_estimate = None
         self.x = None
 
-    def lr(self, epoch, iteration, num_samples, d):
-        p = self.params
-        t = epoch * num_samples + iteration
-        if p.lr_type == 'constant':
-            return p.initial_lr
-        if p.lr_type == 'epoch-decay':
-            return p.initial_lr * (p.epoch_decay_lr ** epoch)
-        if p.lr_type == 'decay':
-            return p.initial_lr / (p.regularizer * (t + p.tau))
-        if p.lr_type == 'bottou':
-            return p.initial_lr / (1 + p.initial_lr * p.regularizer * t)
-
     def loss(self, A, y):
         x = self.x_estimate if self.x_estimate is not None else self.x
         x = x.copy().mean(axis=1)
-        p = self.params
         loss = np.sum(np.log(1 + np.exp(-y * (A @ x)))) / A.shape[0]
-        if p.regularizer:
-            loss += p.regularizer * np.square(x).sum() / 2
+        if self.params.regularizer:
+            loss += self.params.regularizer * np.square(x).sum() / 2
         return loss
+
+    def lr(self, epoch, iteration, num_samples, tau):
+        t = epoch * num_samples + iteration
+        if self.params.lr_type == 'constant':
+            return self.params.initial_lr
+        if self.params.lr_type == 'epoch-decay':
+            return self.params.initial_lr * (self.params.epoch_decay_lr ** epoch)
+        if self.params.lr_type == 'decay':
+            return self.params.initial_lr / (self.params.regularizer * (t + tau))
+        if self.params.lr_type == 'bottou':
+            return self.params.initial_lr / (1 + self.params.initial_lr * self.params.regularizer * t)
 
     def predict(self, A):
         x = self.x_estimate if self.x_estimate is not None else self.x
