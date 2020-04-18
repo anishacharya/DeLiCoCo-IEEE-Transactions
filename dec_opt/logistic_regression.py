@@ -9,6 +9,8 @@ class LogisticRegression:
         self.x = None
 
     def loss(self, A, y):
+        if self.x is None:
+            raise Exception
         x = self.x_estimate if self.x_estimate is not None else self.x
         x = x.copy().mean(axis=1)
         loss = np.sum(np.log(1 + np.exp(-y * (A @ x)))) / A.shape[0]

@@ -18,11 +18,11 @@ class DecGD:
         self.losses = np.zeros(self.param.epochs + 1)
         self.num_samples, self.num_features = self.A.shape
 
-        self.x = np.random.normal(0, INIT_WEIGHT_STD, size=(self.num_features,))
-        self.x = np.tile(self.x, (self.param.n_cores, 1)).T
+        self.model.x = np.random.normal(0, INIT_WEIGHT_STD, size=(self.num_features,))
+        self.model.x = np.tile(self.model.x, (self.param.n_cores, 1)).T
 
-        self.x_estimate = np.copy(self.x)
-        self.x_hat = np.copy(self.x)
+        self.model.x_estimate = np.copy(self.model.x)
+        self.x_hat = np.copy(self.model.x)
 
         # Now Distribute the Data among machines
         # ----------------------------------------
@@ -48,8 +48,8 @@ class DecGD:
         return data_partition_ix, num_samples_per_machine
 
     def _train(self):
-        compute_loss_every = int(self.num_samples_per_machine / LOSS_PER_EPOCH)
-        all_losses = np.zeros(int(self.num_samples_per_machine * p.num_epoch / compute_loss_every) + 1)
+        compute_loss_every = int(self.num_samples_per_machine / LOSS_PER_EPOCH) + 1
+        all_losses = np.zeros(int(self.num_samples_per_machine * self.param.epochs / compute_loss_every) + 1)
         train_start = time.time()
         for epoch in np.arange(self.param.epochs):
             for iteration in range(self.num_samples_per_machine):
