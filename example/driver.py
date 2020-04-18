@@ -29,8 +29,8 @@ def _parse_args():
     parser.add_argument('--topology', type=str, default='ring')
 
     parser.add_argument('--epochs', type=int, default=10)
-    parser.add_argument('--lr_type', type=str, default='constant')
-    parser.add_argument('--initial_lr', type=float, default=0.1)
+    parser.add_argument('--lr_type', type=str, default='decay')
+    parser.add_argument('--initial_lr', type=float, default=0.01)
     parser.add_argument('--regularizer', type=float, default=0.1)
 
     parser.add_argument('--estimate', type=str, default='final')
@@ -57,8 +57,8 @@ if __name__ == '__main__':
 
     """ Run Experiment """
     model = LogisticRegression(params=args)
-    dec_gd = DecGD(feature=data_reader.A_train[0:10, :],
-                   target=data_reader.y_train[0:10, :],
+    dec_gd = DecGD(feature=data_reader.A_train[0:10000, :],
+                   target=data_reader.y_train[0:10000, :],
                    hyper_param=args,
                    model=model)
     print("Now we can plot losses")

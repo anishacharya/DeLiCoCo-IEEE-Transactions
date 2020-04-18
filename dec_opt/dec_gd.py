@@ -56,7 +56,7 @@ class DecGD:
         return data_partition_ix, num_samples_per_machine
 
     def _train(self):
-        losses = np.zeros(self.param.num_epoch + 1)
+        losses = np.zeros(self.param.epochs + 1)
         losses[0] = self.model.loss(self.A, self.y)
 
         compute_loss_every = int(self.num_samples_per_machine / LOSS_PER_EPOCH) + 1
@@ -101,10 +101,11 @@ class DecGD:
                     raise NotImplementedError
 
                 self.model.update_estimate(t)
+
             losses[epoch + 1] = self.model.loss(self.A, self.y)
             print("epoch {}: loss {}".format(epoch, losses[epoch + 1]))
             if np.isinf(losses[epoch + 1]) or np.isnan(losses[epoch + 1]):
                 print("Break training - Diverged")
                 break
 
-            return losses, all_losses
+        return losses, all_losses
