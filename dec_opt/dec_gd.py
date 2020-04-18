@@ -1,6 +1,8 @@
 import numpy as np
 import time
 
+from dec_opt.gossip_matrix import GossipMatrix
+
 INIT_WEIGHT_STD = 0.01
 LOSS_PER_EPOCH = 10
 np.random.seed(1)
@@ -12,6 +14,7 @@ class DecGD:
         self.y = target
         self.param = hyper_param
         self.model = model
+        self.W = GossipMatrix(topology = self.param.topology, n_cores= self.param.n_cores)
 
         # initialize x_hat, x_estimate  Ax = y is the problem we are solving
         # -------------------------------------------------------------------
@@ -79,3 +82,15 @@ class DecGD:
                                                      indices=self.data_partition_ix,
                                                      machine=machine)
                     x_plus[:, machine] = lr * minus_grad
+
+                # Communication step
+                if self.param.algorithm == 'vanilla':
+                    self.model.x = (self.model.x + x_plus).dot(self.W)
+                elif self.param.algorithm == 'choco':
+                    pass
+
+                else:
+                    raise NotImplementedError
+
+                self.model.update_estimate(t)
+

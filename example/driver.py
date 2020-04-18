@@ -21,6 +21,8 @@ def _parse_args():
     parser.add_argument('--n_proc', type=int, default=5)
     parser.add_argument('--n_cores', type=int, default=5)
 
+    parser.add_argument('--topology', type=str, default='ring')
+
     parser.add_argument('--epochs', type=int, default=10)
     parser.add_argument('--lr_type', type=str, default='constant')
     parser.add_argument('--initial_lr', type=float, default=0.1)
