@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.special import expit as sigmoid
+from typing import Dict
 
 
 class LogisticRegression:
@@ -52,6 +53,9 @@ class LogisticRegression:
         pred = 2 * (logits >= 0.) - 1
         acc = np.mean(pred == y)
         return acc
+
+    def _get_grad(self, algorithm: str, indices: Dict):
+        raise NotImplementedError
 
     def update_estimate(self, t):
         t = int(t)  # to avoid overflow with np.int32

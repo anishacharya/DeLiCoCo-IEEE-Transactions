@@ -15,6 +15,7 @@ def _parse_args():
                         help='Pass data-set')
     parser.add_argument('--r', type=str, default=os.path.join(curr_dir, './data/'),
                         help='Pass data root')
+    parser.add_argument('--algorithm', type=str, default='choco_sgd')
 
     parser.add_argument('--n_proc', type=int, default=5)
     parser.add_argument('--n_cores', type=int, default=5)
@@ -23,6 +24,7 @@ def _parse_args():
     parser.add_argument('--lr_type', type=str, default='constant')
     parser.add_argument('--initial_lr', type=float, default=0.1)
     parser.add_argument('--regularizer', type=float, default=0.1)
+
     args = parser.parse_args()
     return args
 

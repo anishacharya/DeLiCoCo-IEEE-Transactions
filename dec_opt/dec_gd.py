@@ -64,5 +64,6 @@ class DecGD:
                         break
                 lr = self.model.lr(epoch=epoch, iteration=iteration, num_samples=self.num_samples_per_machine,
                                    tau=self.num_features)
+
                 # Gradient step
                 x_plus = np.zeros_like(self.x)
