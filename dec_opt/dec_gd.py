@@ -73,6 +73,9 @@ class DecGD:
                 #  for t in 0...T − 1 do in parallel for all workers i ∈[n]
                 for machine in range(0, self.param.n_cores):
                     # Compute neg. Gradient (or stochastic gradient) based on algorithm
-                    minus_grad = self.model.get_grad(algorithm=self.param.stochastic,
-                                                     indices=self.data_partition_ix)
+                    minus_grad = self.model.get_grad(A=self.A,
+                                                     y=self.y,
+                                                     stochastic=self.param.stochastic,
+                                                     indices=self.data_partition_ix,
+                                                     machine=machine)
                     x_plus[:, machine] = lr * minus_grad

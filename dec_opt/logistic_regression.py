@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.special import expit as sigmoid
+from scipy.sparse import isspmatrix
 from typing import Dict
 
 
@@ -54,8 +55,20 @@ class LogisticRegression:
         acc = np.mean(pred == y)
         return acc
 
-    def get_grad(self, stochastic: bool, indices: Dict):
-        raise NotImplementedError
+    def get_grad(self, A, y, stochastic: bool, indices: Dict, machine: int):
+        x = self.x[:, machine]
+        if stochastic:
+            sample_idx = np.random.choice(indices[machine])
+            a = A[sample_idx]
+            minus_grad = y[sample_idx] * a * sigmoid(-y[sample_idx] * a.dot(x).squeeze())
+            if isspmatrix(a):
+                minus_grad = minus_grad.toarray().squeeze(0)
+            if self.params.regularizer:
+                minus_grad -= self.params.regularizer * x
+        else:
+            raise NotImplementedError
+
+        return minus_grad
 
     def update_estimate(self, t):
         t = int(t)  # to avoid overflow with np.int32

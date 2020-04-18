@@ -16,6 +16,7 @@ def _parse_args():
     parser.add_argument('--r', type=str, default=os.path.join(curr_dir, './data/'),
                         help='Pass data root')
     parser.add_argument('--stochastic', type=bool, default=True)
+    parser.add_argument('--algorithm', type=str, default='choco_sgd')
 
     parser.add_argument('--n_proc', type=int, default=5)
     parser.add_argument('--n_cores', type=int, default=5)
