@@ -54,7 +54,7 @@ class LogisticRegression:
         acc = np.mean(pred == y)
         return acc
 
-    def _get_grad(self, algorithm: str, indices: Dict):
+    def get_grad(self, algorithm: str, indices: Dict):
         raise NotImplementedError
 
     def update_estimate(self, t):

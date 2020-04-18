@@ -62,8 +62,17 @@ class DecGD:
                     if np.isinf(loss) or np.isnan(loss):
                         print("training exit - diverging")
                         break
-                lr = self.model.lr(epoch=epoch, iteration=iteration, num_samples=self.num_samples_per_machine,
+
+                lr = self.model.lr(epoch=epoch,
+                                   iteration=iteration,
+                                   num_samples=self.num_samples_per_machine,
                                    tau=self.num_features)
 
                 # Gradient step
-                x_plus = np.zeros_like(self.x)
+                x_plus = np.zeros_like(self.model.x)
+                #  for t in 0...T − 1 do in parallel for all workers i ∈[n]
+                for machine in range(0, self.param.n_cores):
+                    # Compute neg. Gradient (or stochastic gradient) based on algorithm
+                    minus_grad = self.model.get_grad(algorithm=self.param.algorithm,
+                                                     indices=self.data_partition_ix)
+                    x_plus[:, machine] = lr * minus_grad
