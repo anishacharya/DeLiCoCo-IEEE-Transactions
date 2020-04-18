@@ -6,6 +6,11 @@ from dec_opt.data_reader import DataReader
 from dec_opt.dec_gd import DecGD
 from dec_opt.logistic_regression import LogisticRegression
 
+"""
+Author: Anish Acharya
+Contact: anishacharya@utexas.edu
+"""
+
 curr_dir = os.path.dirname(__file__)
 
 
@@ -16,7 +21,7 @@ def _parse_args():
     parser.add_argument('--r', type=str, default=os.path.join(curr_dir, './data/'),
                         help='Pass data root')
     parser.add_argument('--stochastic', type=bool, default=True)
-    parser.add_argument('--algorithm', type=str, default='choco')
+    parser.add_argument('--algorithm', type=str, default='vanilla')
 
     parser.add_argument('--n_proc', type=int, default=5)
     parser.add_argument('--n_cores', type=int, default=5)
@@ -28,6 +33,7 @@ def _parse_args():
     parser.add_argument('--initial_lr', type=float, default=0.1)
     parser.add_argument('--regularizer', type=float, default=0.1)
 
+    parser.add_argument('--estimate', type=str, default='final')
     args = parser.parse_args()
     return args
 
@@ -55,6 +61,7 @@ if __name__ == '__main__':
                    target=data_reader.y_train[0:10, :],
                    hyper_param=args,
                    model=model)
+    print("Now we can plot losses")
 
 
 

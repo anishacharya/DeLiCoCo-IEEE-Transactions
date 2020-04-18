@@ -1,6 +1,11 @@
 import numpy as np
 import networkx
 
+"""
+Author: Anish Acharya
+Contact: anishacharya@utexas.edu
+"""
+
 
 class GossipMatrix:
     def __init__(self, topology, n_cores):

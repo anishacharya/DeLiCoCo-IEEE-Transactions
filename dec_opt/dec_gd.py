@@ -3,6 +3,11 @@ import time
 
 from dec_opt.gossip_matrix import GossipMatrix
 
+"""
+Author: Anish Acharya
+Contact: anishacharya@utexas.edu
+"""
+
 INIT_WEIGHT_STD = 0.01
 LOSS_PER_EPOCH = 10
 np.random.seed(1)
@@ -14,7 +19,7 @@ class DecGD:
         self.y = target
         self.param = hyper_param
         self.model = model
-        self.W = GossipMatrix(topology = self.param.topology, n_cores= self.param.n_cores)
+        self.W = GossipMatrix(topology=self.param.topology, n_cores= self.param.n_cores).W
 
         # initialize x_hat, x_estimate  Ax = y is the problem we are solving
         # -------------------------------------------------------------------
@@ -33,7 +38,7 @@ class DecGD:
 
         # Decentralized Training
         # --------------------------
-        self._train()
+        self.epoch_losses, self.all_losses = self._train()
 
     def _distribute_data(self):
         data_partition_ix = []
@@ -51,6 +56,9 @@ class DecGD:
         return data_partition_ix, num_samples_per_machine
 
     def _train(self):
+        losses = np.zeros(self.param.num_epoch + 1)
+        losses[0] = self.model.loss(self.A, self.y)
+
         compute_loss_every = int(self.num_samples_per_machine / LOSS_PER_EPOCH) + 1
         all_losses = np.zeros(int(self.num_samples_per_machine * self.param.epochs / compute_loss_every) + 1)
         train_start = time.time()
@@ -93,4 +101,10 @@ class DecGD:
                     raise NotImplementedError
 
                 self.model.update_estimate(t)
+            losses[epoch + 1] = self.model.loss(self.A, self.y)
+            print("epoch {}: loss {}".format(epoch, losses[epoch + 1]))
+            if np.isinf(losses[epoch + 1]) or np.isnan(losses[epoch + 1]):
+                print("Break training - Diverged")
+                break
 
+            return losses, all_losses

@@ -1,5 +1,10 @@
 import numpy as np
 
+"""
+Author: Anish Acharya
+Contact: anishacharya@utexas.edu
+"""
+
 
 class Compression:
     def __init__(self, x,

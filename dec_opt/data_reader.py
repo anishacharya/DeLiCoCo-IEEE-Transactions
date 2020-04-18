@@ -1,6 +1,11 @@
 import torchvision.datasets as datasets
 import numpy as np
 
+"""
+Author: Anish Acharya
+Contact: anishacharya@utexas.edu
+"""
+
 
 class DataReader:
     def __init__(self, root: str, data_set: str = 'mnist', download=True):
