@@ -7,17 +7,14 @@ Contact: anishacharya@utexas.edu
 
 
 class Compression:
-    def __init__(self, x,
-                 num_levels: int = 1,
-                 quantization_function: str = 'top',
-                 coordinates_to_keep: str = 1):
-        self.x = x
+    def __init__(self, num_levels: int,
+                 quantization_function: str,
+                 coordinates_to_keep: int):
         self.quantization_function = quantization_function
         self.num_levels = num_levels
         self.coordinates_to_keep = coordinates_to_keep
-        self.Q = self.__quantize(x=x)
 
-    def __quantize(self, x):
+    def quantize(self, x):
         # quantize according to quantization function
         # x: shape(num_features, n_cores)
         if self.quantization_function in ['qsgd-biased', 'qsgd-unbiased']:

@@ -27,6 +27,11 @@ def _parse_args():
     parser.add_argument('--n_cores', type=int, default=5)
 
     parser.add_argument('--topology', type=str, default='ring')
+    parser.add_argument('--concensus_lr', type=str, default='ring')
+
+    parser.add_argument('--quantization_function', type=str, default='top')
+    parser.add_argument('--num_levels', type=int, default=1)
+    parser.add_argument('--coordinates_to_keep', type=int, default=1)
 
     parser.add_argument('--epochs', type=int, default=10)
     parser.add_argument('--lr_type', type=str, default='decay')

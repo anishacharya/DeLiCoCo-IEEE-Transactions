@@ -2,6 +2,7 @@ import numpy as np
 import time
 
 from dec_opt.gossip_matrix import GossipMatrix
+from dec_opt.compression import Compression
 
 """
 Author: Anish Acharya
@@ -20,7 +21,9 @@ class DecGD:
         self.param = hyper_param
         self.model = model
         self.W = GossipMatrix(topology=self.param.topology, n_cores=self.param.n_cores).W
-
+        self.Q = Compression(num_levels=self.param.num_levels,
+                             quantization_function=self.param.quantization_function,
+                             coordinates_to_keep=self.param.coordinates_to_keep)
         # initialize x_hat, x_estimate  Ax = y is the problem we are solving
         # -------------------------------------------------------------------
         self.losses = np.zeros(self.param.epochs + 1)
@@ -102,8 +105,12 @@ class DecGD:
                 if self.param.algorithm == 'vanilla':
                     self.model.x = (self.model.x + x_plus).dot(self.W)
                 elif self.param.algorithm == 'choco':
-                    pass
+                    x_plus += self.model.x
+                    self.model.x = x_plus + self.param.consensus_lr * \
+                        self.model.x_hat.dot(self.W - np.eye(self.param.n_cores))
 
+                    quantized = self.Q.quantize(self.model.x - self.model.x_hat)
+                    self.model.x_hat += quantized
                 else:
                     raise NotImplementedError
 
