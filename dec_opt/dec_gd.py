@@ -33,7 +33,7 @@ class DecGD:
         self.model.x = np.tile(self.model.x, (self.param.n_cores, 1)).T
 
         self.model.x_estimate = np.copy(self.model.x)
-        self.x_hat = np.copy(self.model.x)
+        self.model.x_hat = np.copy(self.model.x)
 
         # if cifar10 or mnist dataset, then make it binary
         if len(np.unique(self.y)) > 2:
