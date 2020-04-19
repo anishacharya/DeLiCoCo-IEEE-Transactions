@@ -19,7 +19,7 @@ class DecGD:
         self.y = target
         self.param = hyper_param
         self.model = model
-        self.W = GossipMatrix(topology=self.param.topology, n_cores= self.param.n_cores).W
+        self.W = GossipMatrix(topology=self.param.topology, n_cores=self.param.n_cores).W
 
         # initialize x_hat, x_estimate  Ax = y is the problem we are solving
         # -------------------------------------------------------------------
@@ -31,6 +31,13 @@ class DecGD:
 
         self.model.x_estimate = np.copy(self.model.x)
         self.x_hat = np.copy(self.model.x)
+
+        # if cifar10 or mnist dataset, then make it binary
+        if len(np.unique(self.y)) > 2:
+            self.y[self.y < 5] = -1
+            self.y[self.y >= 5] = 1
+
+        print("Number of different labels:", len(np.unique(self.y)))
 
         # Now Distribute the Data among machines
         # ----------------------------------------
@@ -103,9 +110,11 @@ class DecGD:
                 self.model.update_estimate(t)
 
             losses[epoch + 1] = self.model.loss(self.A, self.y)
-            print("epoch {}: loss {}".format(epoch, losses[epoch + 1]))
+            print("epoch : {}; loss: {}; accuracy : {}".format(epoch, losses[epoch + 1],
+                                                               self.model.score(A=self.A, y=self.y)))
             if np.isinf(losses[epoch + 1]) or np.isnan(losses[epoch + 1]):
                 print("Break training - Diverged")
                 break
 
+        print("Training took: {}s".format(time.time() - train_start))
         return losses, all_losses
