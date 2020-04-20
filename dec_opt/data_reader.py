@@ -27,3 +27,6 @@ class DataReader:
         y_test = mnist_test.train_labels.numpy().reshape(10000, 1).astype(np.float32)
 
         return x_train, y_train, x_test, y_test
+
+    def get_breast_cancer(self):
+        raise NotImplementedError

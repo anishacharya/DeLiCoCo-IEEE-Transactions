@@ -3,7 +3,7 @@
 # Pulls and creates pickle files for libsvm data
 
 curr_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-data_dir=$curr_dir'../data'
+data_dir=$curr_dir'/../example/data'
 
 mkdir -p "$data_dir"
 
@@ -31,6 +31,16 @@ then
 	fi
 fi
 
+if [ "$datasets" == 'breast_cancer' ] || [ "$datasets" == 'all' ];
+then
+	if [ -f "$data_dir"'/breast_cancer' ]; then echo "epsilon exists skipping download"
+	else
+		wget -t inf https://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/binary/breast-cancer
+		mv 'breast-cancer' "$data_dir"
+#		echo "Processing epsilon"
+#		python3 pickle_data.py --i "$data_dir"'/epsilon_normalized.bz2' --o "$data_dir"'/breast_cancer.pickle'
+	fi
+fi
 
 
 
