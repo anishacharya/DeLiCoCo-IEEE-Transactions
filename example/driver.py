@@ -24,7 +24,7 @@ def _parse_args():
     parser.add_argument('--algorithm', type=str, default='vanilla')
 
     parser.add_argument('--n_proc', type=int, default=5)
-    parser.add_argument('--n_cores', type=int, default=5)
+    parser.add_argument('--n_cores', type=int, default=1)
 
     parser.add_argument('--topology', type=str, default='centralized')
     parser.add_argument('--consensus_lr', type=float, default=0.34)
@@ -66,6 +66,8 @@ if __name__ == '__main__':
                    target=data_reader.y_train,
                    hyper_param=args,
                    model=model)
+    print("Testing Logistic Regression")
+
     print("Now we can plot losses")
 
 

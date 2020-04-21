@@ -29,8 +29,8 @@ class DecGD:
         self.losses = np.zeros(self.param.epochs + 1)
         self.num_samples, self.num_features = self.A.shape
 
-        self.model.x = np.random.normal(0, INIT_WEIGHT_STD, size=(self.num_features,))
-        self.model.x = np.tile(self.model.x, (self.param.n_cores, 1)).T
+        self.model.x_estimate = np.random.normal(0, INIT_WEIGHT_STD, size=(self.num_features,))
+        self.model.x_estimate = np.tile(self.model.x_estimate, (self.param.n_cores, 1)).T
 
         self.model.x_estimate = np.copy(self.model.x)
         self.model.x_hat = np.copy(self.model.x)
