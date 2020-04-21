@@ -62,11 +62,7 @@ class DecGD:
     def _dec_train(self):
         losses = np.zeros(self.param.epochs + 1)
         losses[0] = self.model.loss(self.A, self.y)
-
-        compute_loss_every = int(self.num_samples_per_machine / LOSS_PER_EPOCH) + 1
-        all_losses = np.zeros(int(self.num_samples_per_machine * self.param.epochs / compute_loss_every) + 1)
         train_start = time.time()
-
         for epoch in np.arange(self.param.epochs):
             loss = self.model.loss(self.A, self.y)
             if np.isinf(loss) or np.isnan(loss):
@@ -76,7 +72,6 @@ class DecGD:
                                iteration=epoch,
                                num_samples=self.num_samples_per_machine,
                                tau=self.num_features)
-
             # Gradient step
             x_plus = np.zeros_like(self.model.x_estimate)
             #  for t in 0...T − 1 do in parallel for all workers i ∈[n]
@@ -88,31 +83,27 @@ class DecGD:
                                                  indices=self.data_partition_ix,
                                                  machine=machine)
                 x_plus[:, machine] = lr * minus_grad
-
             # Communication step
-            if self.param.algorithm == 'vanilla':
-                self.model.x_estimate = (self.model.x_estimate + x_plus).dot(self.W)
-
+            if self.param.algorithm == 'exact_comm':
+                # Xiao, Boyd; Fast Linear Iterations for Distributed Averaging
+                # self.model.x_estimate = (self.model.x_estimate + x_plus).dot(self.W)
+                pass
             elif self.param.algorithm == 'choco':
                 x_plus += self.model.x
                 self.model.x = x_plus + self.param.consensus_lr * \
                     self.model.x_hat.dot(self.W - np.eye(self.param.n_cores))
-
                 quantized = self.Q.quantize(self.model.x - self.model.x_hat)
                 self.model.x_hat += quantized
             else:
                 raise NotImplementedError
-
             # self.model.update_estimate(t)
             losses[epoch + 1] = self.model.loss(self.A, self.y)
             pred = self.model.predict(A=self.A)
             pred_labels = self.model.classify(predictions=pred)
             acc = self.model.accuracy(pred_labels, self.y)
             print("epoch : {}; loss: {}; accuracy : {}".format(epoch, losses[epoch + 1], acc))
-
             if np.isinf(losses[epoch + 1]) or np.isnan(losses[epoch + 1]):
                 print("Break training - Diverged")
                 break
-
         print("Training took: {}s".format(time.time() - train_start))
         return losses

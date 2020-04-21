@@ -11,6 +11,7 @@ class LogisticRegression:
     def __init__(self, params):
         self.params = params
         self.x_estimate = None
+        self.x_cap = None
 
     def loss(self, A, y):
         x = np.copy(self.x_estimate)
