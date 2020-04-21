@@ -104,6 +104,7 @@ class DecGD:
                 # Communication step
                 if self.param.algorithm == 'vanilla':
                     self.model.x = (self.model.x + x_plus).dot(self.W)
+
                 elif self.param.algorithm == 'choco':
                     x_plus += self.model.x
                     self.model.x = x_plus + self.param.consensus_lr * \
