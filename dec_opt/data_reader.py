@@ -1,5 +1,9 @@
 import torchvision.datasets as datasets
+from sklearn.model_selection import train_test_split
+from sklearn.datasets import load_breast_cancer
+from sklearn.utils import shuffle
 import numpy as np
+import time
 
 """
 Author: Anish Acharya
@@ -8,12 +12,14 @@ Contact: anishacharya@utexas.edu
 
 
 class DataReader:
-    def __init__(self, root: str, data_set: str = 'mnist', download=True):
+    def __init__(self, root: str, data_set: str = 'mnist', download=True, test_split: float = 0.2):
         self.data_set = data_set
         self.root = root
         self.download = download
         if data_set == 'mnist':
             self.A_train, self.y_train, self.A_test, self.y_test = self._get_mnist()
+        elif data_set == 'breast_cancer':
+            self._get_breast_cancer(test_split=test_split)
         else:
             raise NotImplementedError
 
@@ -28,5 +34,17 @@ class DataReader:
 
         return x_train, y_train, x_test, y_test
 
-    def get_breast_cancer(self):
-        raise NotImplementedError
+    @staticmethod
+    def _get_breast_cancer(test_split):
+        print('Reading Breast Cancer Data')
+        t0 = time.time()
+        data_bunch = load_breast_cancer()
+        x = data_bunch.data
+        y = data_bunch.target
+        x, y = shuffle(x, y)
+        x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=test_split)
+        print('Time to read Breast Cancer Data = {}s'.format(time.time()-t0))
+
+        return x_train, y_train, x_test, y_test
+
+
