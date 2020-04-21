@@ -20,7 +20,7 @@ def _parse_args():
                         help='Pass data-set')
     parser.add_argument('--r', type=str, default=os.path.join(curr_dir, './data/'),
                         help='Pass data root')
-    parser.add_argument('--stochastic', type=bool, default=True)
+    parser.add_argument('--stochastic', type=bool, default=False)
     parser.add_argument('--algorithm', type=str, default='vanilla')
 
     parser.add_argument('--n_proc', type=int, default=5)

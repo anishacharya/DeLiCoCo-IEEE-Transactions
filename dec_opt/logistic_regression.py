@@ -12,6 +12,7 @@ class LogisticRegression:
     def __init__(self, params):
         self.params = params
         self.x_estimate = None
+        self.accuracy = 0
 
     def loss(self, A, y):
         x = np.copy(self.x_estimate)
@@ -39,19 +40,8 @@ class LogisticRegression:
         x = np.mean(x, axis=1)
 
         logits = A @ x
-        z = np.dot(A, x)
         pred = self.sigmoid(logits)
-        # pred = 1 * (logits >= 0.)
         return pred
-
-    def score(self, A, y):
-        x = self.x_estimate if self.x_estimate is not None else self.x
-        x = np.copy(x)
-        x = np.mean(x, axis=1)
-        logits = A @ x
-        pred = 2 * (logits >= 0.) - 1
-        acc = np.mean(pred == y)
-        return acc
 
     @staticmethod
     def decision_boundary(prob):

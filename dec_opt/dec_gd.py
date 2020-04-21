@@ -32,13 +32,13 @@ class DecGD:
         self.model.x_estimate = np.random.normal(0, INIT_WEIGHT_STD, size=(self.num_features,))
         self.model.x_estimate = np.tile(self.model.x_estimate, (self.param.n_cores, 1)).T
 
-        self.model.x_estimate = np.copy(self.model.x)
-        self.model.x_hat = np.copy(self.model.x)
+        # self.model.x_estimate = np.copy(self.model.x)
+        # self.model.x_hat = np.copy(self.model.x)
 
         # if cifar10 or mnist dataset, then make it binary
-        if len(np.unique(self.y)) > 2:
-            self.y[self.y < 5] = -1
-            self.y[self.y >= 5] = 1
+        # if len(np.unique(self.y)) > 2:
+        #     self.y[self.y < 5] = -1
+        #     self.y[self.y >= 5] = 1
 
         print("Number of different labels:", len(np.unique(self.y)))
 
@@ -90,7 +90,7 @@ class DecGD:
                                    tau=self.num_features)
 
                 # Gradient step
-                x_plus = np.zeros_like(self.model.x)
+                x_plus = np.zeros_like(self.model.x_estimate)
                 #  for t in 0...T − 1 do in parallel for all workers i ∈[n]
                 for machine in range(0, self.param.n_cores):
                     # Compute neg. Gradient (or stochastic gradient) based on algorithm
@@ -103,7 +103,7 @@ class DecGD:
 
                 # Communication step
                 if self.param.algorithm == 'vanilla':
-                    self.model.x = (self.model.x + x_plus).dot(self.W)
+                    self.model.x_estimate = (self.model.x_estimate + x_plus).dot(self.W)
 
                 elif self.param.algorithm == 'choco':
                     x_plus += self.model.x
