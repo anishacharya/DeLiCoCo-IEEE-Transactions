@@ -31,14 +31,8 @@ class DecGD:
 
         self.model.x_estimate = np.random.normal(0, INIT_WEIGHT_STD, size=(self.num_features,))
         self.model.x_estimate = np.tile(self.model.x_estimate, (self.param.n_cores, 1)).T
-
         # self.model.x_estimate = np.copy(self.model.x)
         # self.model.x_hat = np.copy(self.model.x)
-
-        # if cifar10 or mnist dataset, then make it binary
-        # if len(np.unique(self.y)) > 2:
-        #     self.y[self.y < 5] = -1
-        #     self.y[self.y >= 5] = 1
 
         print("Number of different labels:", len(np.unique(self.y)))
 
@@ -48,7 +42,7 @@ class DecGD:
 
         # Decentralized Training
         # --------------------------
-        self.epoch_losses, self.all_losses = self._train()
+        self.epoch_losses = self._dec_train()
 
     def _distribute_data(self):
         data_partition_ix = []
@@ -65,64 +59,60 @@ class DecGD:
         print("length of last machine indices:", len(data_partition_ix[-1]))
         return data_partition_ix, num_samples_per_machine
 
-    def _train(self):
+    def _dec_train(self):
         losses = np.zeros(self.param.epochs + 1)
         losses[0] = self.model.loss(self.A, self.y)
 
         compute_loss_every = int(self.num_samples_per_machine / LOSS_PER_EPOCH) + 1
         all_losses = np.zeros(int(self.num_samples_per_machine * self.param.epochs / compute_loss_every) + 1)
         train_start = time.time()
+
         for epoch in np.arange(self.param.epochs):
-            for iteration in range(self.num_samples_per_machine):
-                t = epoch * self.num_samples_per_machine + iteration
-                if t % compute_loss_every == 0:
-                    loss = self.model.loss(self.A, self.y)
-                    print('t {} epoch {} iter {} loss {} elapsed {}s'.format(t, epoch, iteration, loss,
-                                                                             time.time() - train_start))
-                    all_losses[t // compute_loss_every] = loss
-                    if np.isinf(loss) or np.isnan(loss):
-                        print("training exit - diverging")
-                        break
+            loss = self.model.loss(self.A, self.y)
+            if np.isinf(loss) or np.isnan(loss):
+                print("training exit - diverging")
+                break
+            lr = self.model.lr(epoch=epoch,
+                               iteration=epoch,
+                               num_samples=self.num_samples_per_machine,
+                               tau=self.num_features)
 
-                lr = self.model.lr(epoch=epoch,
-                                   iteration=iteration,
-                                   num_samples=self.num_samples_per_machine,
-                                   tau=self.num_features)
+            # Gradient step
+            x_plus = np.zeros_like(self.model.x_estimate)
+            #  for t in 0...T − 1 do in parallel for all workers i ∈[n]
+            for machine in range(0, self.param.n_cores):
+                # Compute neg. Gradient (or stochastic gradient) based on algorithm
+                minus_grad = self.model.get_grad(A=self.A,
+                                                 y=self.y,
+                                                 stochastic=self.param.stochastic,
+                                                 indices=self.data_partition_ix,
+                                                 machine=machine)
+                x_plus[:, machine] = lr * minus_grad
 
-                # Gradient step
-                x_plus = np.zeros_like(self.model.x_estimate)
-                #  for t in 0...T − 1 do in parallel for all workers i ∈[n]
-                for machine in range(0, self.param.n_cores):
-                    # Compute neg. Gradient (or stochastic gradient) based on algorithm
-                    minus_grad = self.model.get_grad(A=self.A,
-                                                     y=self.y,
-                                                     stochastic=self.param.stochastic,
-                                                     indices=self.data_partition_ix,
-                                                     machine=machine)
-                    x_plus[:, machine] = lr * minus_grad
+            # Communication step
+            if self.param.algorithm == 'vanilla':
+                self.model.x_estimate = (self.model.x_estimate + x_plus).dot(self.W)
 
-                # Communication step
-                if self.param.algorithm == 'vanilla':
-                    self.model.x_estimate = (self.model.x_estimate + x_plus).dot(self.W)
+            elif self.param.algorithm == 'choco':
+                x_plus += self.model.x
+                self.model.x = x_plus + self.param.consensus_lr * \
+                    self.model.x_hat.dot(self.W - np.eye(self.param.n_cores))
 
-                elif self.param.algorithm == 'choco':
-                    x_plus += self.model.x
-                    self.model.x = x_plus + self.param.consensus_lr * \
-                        self.model.x_hat.dot(self.W - np.eye(self.param.n_cores))
+                quantized = self.Q.quantize(self.model.x - self.model.x_hat)
+                self.model.x_hat += quantized
+            else:
+                raise NotImplementedError
 
-                    quantized = self.Q.quantize(self.model.x - self.model.x_hat)
-                    self.model.x_hat += quantized
-                else:
-                    raise NotImplementedError
-
-                self.model.update_estimate(t)
-
+            # self.model.update_estimate(t)
             losses[epoch + 1] = self.model.loss(self.A, self.y)
-            print("epoch : {}; loss: {}; accuracy : {}".format(epoch, losses[epoch + 1],
-                                                               self.model.score(A=self.A, y=self.y)))
+            pred = self.model.predict(A=self.A)
+            pred_labels = self.model.classify(predictions=pred)
+            acc = self.model.accuracy(pred_labels, self.y)
+            print("epoch : {}; loss: {}; accuracy : {}".format(epoch, losses[epoch + 1], acc))
+
             if np.isinf(losses[epoch + 1]) or np.isnan(losses[epoch + 1]):
                 print("Break training - Diverged")
                 break
 
         print("Training took: {}s".format(time.time() - train_start))
-        return losses, all_losses
+        return losses

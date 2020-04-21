@@ -20,7 +20,7 @@ class DataReader:
         if data_set == 'mnist':
             self.A_train, self.y_train, self.A_test, self.y_test = self._get_mnist()
         elif data_set == 'breast_cancer':
-             self.A_train, self.y_train, self.A_test, self.y_test = self._get_breast_cancer(test_split=test_split)
+            self.A_train, self.y_train, self.A_test, self.y_test = self._get_breast_cancer(test_split=test_split)
         else:
             raise NotImplementedError
 
@@ -43,13 +43,8 @@ class DataReader:
         x = data_bunch.data
         x = preprocessing.scale(x)
         y = data_bunch.target
-        # convert 0 to -1 label
-        # y[y == 0] = -1
-
         x, y = shuffle(x, y)
         x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=test_split)
-        print('Time to read Breast Cancer Data = {}s'.format(time.time()-t0))
+        print('Time to read Breast Cancer Data = {}s'.format(time.time() - t0))
 
         return x_train, y_train, x_test, y_test
-
-

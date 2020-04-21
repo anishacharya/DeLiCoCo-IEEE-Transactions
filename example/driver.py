@@ -6,6 +6,8 @@ from dec_opt.data_reader import DataReader
 from dec_opt.dec_gd import DecGD
 from dec_opt.logistic_regression import LogisticRegression
 
+import matplotlib.pyplot as plt
+
 """
 Author: Anish Acharya
 Contact: anishacharya@utexas.edu
@@ -33,9 +35,9 @@ def _parse_args():
     parser.add_argument('--num_levels', type=int, default=16)
     parser.add_argument('--coordinates_to_keep', type=int, default=1)
 
-    parser.add_argument('--epochs', type=int, default=50)
+    parser.add_argument('--epochs', type=int, default=100)
     parser.add_argument('--lr_type', type=str, default='decay')
-    parser.add_argument('--initial_lr', type=float, default=0.01)
+    parser.add_argument('--initial_lr', type=float, default=0.001)
     parser.add_argument('--regularizer', type=float, default=0.1)
 
     parser.add_argument('--estimate', type=str, default='final')
@@ -66,9 +68,10 @@ if __name__ == '__main__':
                    target=data_reader.y_train,
                    hyper_param=args,
                    model=model)
-    print("Testing Logistic Regression")
-
     print("Now we can plot losses")
+    plt.plot(dec_gd.epoch_losses)
+    plt.show()
+
 
 
 

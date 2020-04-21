@@ -1,7 +1,6 @@
 import numpy as np
 from scipy.sparse import isspmatrix
 from typing import Dict
-import matplotlib as plt
 """
 Author: Anish Acharya
 Contact: anishacharya@utexas.edu
@@ -12,7 +11,6 @@ class LogisticRegression:
     def __init__(self, params):
         self.params = params
         self.x_estimate = None
-        self.accuracy = 0
 
     def loss(self, A, y):
         x = np.copy(self.x_estimate)
@@ -88,22 +86,6 @@ class LogisticRegression:
 
         return minus_grad
 
-    @staticmethod
-    def plot_decision_boundary(trues, falses):
-        fig = plt.figure()
-        ax = fig.add_subplot(111)
-
-        no_of_preds = len(trues) + len(falses)
-
-        ax.scatter([i for i in range(len(trues))], trues, s=25, c='b', marker="o", label='Trues')
-        ax.scatter([i for i in range(len(falses))], falses, s=25, c='r', marker="s", label='Falses')
-
-        plt.legend(loc='upper right');
-        ax.set_title("Decision Boundary")
-        ax.set_xlabel('N/2')
-        ax.set_ylabel('Predicted Probability')
-        plt.axhline(.5, color='black')
-        plt.show()
     # def update_estimate(self, t):
     #     t = int(t)  # to avoid overflow with np.int32
     #     p = self.params
@@ -126,7 +108,7 @@ class LogisticRegression:
         if self.params.lr_type == 'epoch-decay':
             return self.params.initial_lr * (self.params.epoch_decay_lr ** epoch)
         if self.params.lr_type == 'decay':
-            return self.params.initial_lr / (self.params.regularizer * (t + tau))
+            return 0.99 * self.params.initial_lr # / (self.params.regularizer * (t + tau))
         if self.params.lr_type == 'bottou':
             return self.params.initial_lr / (1 + self.params.initial_lr * self.params.regularizer * t)
 
