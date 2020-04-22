@@ -10,7 +10,6 @@ Contact: anishacharya@utexas.edu
 """
 
 INIT_WEIGHT_STD = 0.01
-LOSS_PER_EPOCH = 10
 np.random.seed(1)
 
 
@@ -70,8 +69,8 @@ class DecGD:
                 break
             lr = self.model.lr(epoch=epoch,
                                iteration=epoch,
-                               num_samples=self.num_samples_per_machine,
-                               tau=self.num_features)
+                               num_samples=self.num_samples_per_machine)
+                               # tau=self.num_features)
             # Gradient step
             x_plus = np.zeros_like(self.model.x_estimate)
             #  for t in 0...T − 1 do in parallel for all workers i ∈[n]
@@ -83,11 +82,12 @@ class DecGD:
                                                  indices=self.data_partition_ix,
                                                  machine=machine)
                 x_plus[:, machine] = lr * minus_grad
+            # x_(t+1/2) = x_(t) - lr * grad - Do GD Update
+            self.model.x_cap = self.model.x_estimate + x_plus
             # Communication step
             if self.param.algorithm == 'exact_comm':
                 # Xiao, Boyd; Fast Linear Iterations for Distributed Averaging
-                # self.model.x_estimate = (self.model.x_estimate + x_plus).dot(self.W)
-                pass
+                self.model.x_estimate = self.model.x_cap @ self.W
             elif self.param.algorithm == 'choco':
                 x_plus += self.model.x
                 self.model.x = x_plus + self.param.consensus_lr * \
@@ -95,7 +95,8 @@ class DecGD:
                 quantized = self.Q.quantize(self.model.x - self.model.x_hat)
                 self.model.x_hat += quantized
             else:
-                raise NotImplementedError
+                # do nothing just plain GD
+                self.model.x_estimate = self.model.x_cap
             # self.model.update_estimate(t)
             losses[epoch + 1] = self.model.loss(self.A, self.y)
             pred = self.model.predict(A=self.A)

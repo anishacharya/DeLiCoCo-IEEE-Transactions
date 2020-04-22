@@ -102,15 +102,12 @@ class LogisticRegression:
     #         rho = 6 * ((t + p.tau) ** 2) / ((1 + t) * (6 * (p.tau ** 2) + t + 6 * p.tau * t + 2 * (t ** 2)))
     #         self.x_estimate = self.x_estimate * (1 - rho) + self.x * rho
 
-    def lr(self, epoch, iteration, num_samples, tau):
+    def lr(self, epoch, iteration, num_samples):
         t = epoch * num_samples + iteration
         if self.params.lr_type == 'constant':
             return self.params.initial_lr
-        if self.params.lr_type == 'epoch-decay':
+        elif self.params.lr_type == 'epoch-decay':
             return self.params.initial_lr * (self.params.epoch_decay_lr ** epoch)
-        if self.params.lr_type == 'decay':
-            return 0.99 * self.params.initial_lr # / (self.params.regularizer * (t + tau))
-        if self.params.lr_type == 'bottou':
-            return self.params.initial_lr / (1 + self.params.initial_lr * self.params.regularizer * t)
+
 
 
