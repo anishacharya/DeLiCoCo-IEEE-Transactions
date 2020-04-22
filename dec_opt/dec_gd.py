@@ -23,17 +23,18 @@ class DecGD:
         self.Q = Compression(num_levels=self.param.num_levels,
                              quantization_function=self.param.quantization_function,
                              coordinates_to_keep=self.param.coordinates_to_keep)
-        # initialize x_hat, x_estimate  Ax = y is the problem we are solving
-        # -------------------------------------------------------------------
+
+        # initialize parameters for each node. Ax = y is the problem we are solving
+        # ----------------------------------------------------------------------------------
         self.losses = np.zeros(self.param.epochs + 1)
         self.num_samples, self.num_features = self.A.shape
 
         self.model.x_estimate = np.random.normal(0, INIT_WEIGHT_STD, size=(self.num_features,))
         self.model.x_estimate = np.tile(self.model.x_estimate, (self.param.n_cores, 1)).T
         # self.model.x_estimate = np.copy(self.model.x)
-        self.model.x_hat = np.copy(self.model.x)
-
-        print("Number of different labels:", len(np.unique(self.y)))
+        # self.model.x_hat = np.copy(self.model.x)
+        self.model.Z = np.copy(self.model.x_estimate)
+        self.model.S = np.copy(self.model.x_estimate)
 
         # Now Distribute the Data among machines
         # ----------------------------------------
@@ -84,20 +85,30 @@ class DecGD:
                                                  machine=machine)
                 x_plus[:, machine] = lr * minus_grad
             # x_(t+1/2) = x_(t) - lr * grad - Do GD Update
-            self.model.x_cap = self.model.x_estimate + x_plus
+            x_cap = self.model.x_estimate + x_plus
 
             # Communication step
-            # --------------------------
+            # -----------------------------------------
             if self.param.algorithm == 'exact_comm':
                 # Xiao, Boyd; Fast Linear Iterations for Distributed Averaging
-                self.model.x_estimate = self.model.x_cap @ self.W
+                self.model.x_estimate = x_cap @ self.W
             elif self.param.algorithm == 'ours':
-                pass
+                # local gradient update i.e. X_t0
+                self.model.x_estimate = x_cap
+                # now iterate and update the estimate to X_tQ
+                for i in range(0, self.param.Q):
+                    # Exchanging messages
+                    self.model.S = self.model.S + (self.model.x_estimate - self.model.Z)@ self.W
+                    # Compression error feedback
+                    self.model.Z = self.model.Z + (self.model.x_estimate - self.model.Z)
+                    # Local gossip update
+                    self.model.x_estimate = self.model.x_estimate + \
+                        self.param.consensus_lr * (self.model.S - self.model.Z)
             elif self.param.algorithm == 'choco-sgd':
                 # Koloskove,Stich,Jaggi; Decentralized Stochastic
                 # Optimization and Gossip Algorithms with Compressed Communication
                 # x_(t+1) = x_(t+1/2) + \gamma W.dot.(x^_j(t+1) - x^_i(t+1))
-                self.model.x_estimate = self.model.x_cap + \
+                self.model.x_estimate = x_cap + \
                         self.param.consensus_lr * self.model.x_hat.dot(self.W - np.eye(self.param.n_cores))
                 pass
             else:

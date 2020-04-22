@@ -12,9 +12,8 @@ class LogisticRegression:
         self.params = params
 
         self.x_estimate = None
-
-        self.x_cap = None  # Denotes x(t+1/2)
-        self.x_hat = None  # Denotes x^
+        self.Z = None
+        self.S = None
 
     def loss(self, A, y):
         x = np.copy(self.x_estimate)
