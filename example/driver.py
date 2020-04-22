@@ -25,7 +25,7 @@ def _parse_args():
     parser.add_argument('--stochastic', type=bool, default=False)
     parser.add_argument('--algorithm', type=str, default='ours')
 
-    parser.add_argument('--n_cores', type=int, default=1)
+    parser.add_argument('--n_cores', type=int, default=10)
 
     parser.add_argument('--topology', type=str, default='centralized')
     parser.add_argument('--Q', type=int, default=10)
