@@ -98,12 +98,15 @@ class DecGD:
                 # now iterate and update the estimate to X_tQ
                 for i in range(0, self.param.Q):
                     # Exchanging messages
-                    self.model.S = self.model.S + (self.model.x_estimate - self.model.Z)@ self.W
+                    message_exchange = (self.model.x_estimate - self.model.Z)
+                    self.model.S = self.model.S + message_exchange @ self.W
                     # Compression error feedback
-                    self.model.Z = self.model.Z + (self.model.x_estimate - self.model.Z)
+                    error_feedback = (self.model.x_estimate - self.model.Z)
+                    self.model.Z = self.model.Z + error_feedback
                     # Local gossip update
+                    gossip_update = (self.model.S - self.model.Z)
                     self.model.x_estimate = self.model.x_estimate + \
-                        self.param.consensus_lr * (self.model.S - self.model.Z)
+                        self.param.consensus_lr * gossip_update
             elif self.param.algorithm == 'choco-sgd':
                 # Koloskove,Stich,Jaggi; Decentralized Stochastic
                 # Optimization and Gossip Algorithms with Compressed Communication
