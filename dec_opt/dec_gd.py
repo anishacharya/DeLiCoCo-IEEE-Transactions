@@ -20,7 +20,7 @@ class DecGD:
         self.param = hyper_param
         self.model = model
         self.W = GossipMatrix(topology=self.param.topology, n_cores=self.param.n_cores).W
-        self.Q = Compression(num_levels=self.param.num_levels,
+        self.C = Compression(num_levels=self.param.num_levels,
                              quantization_function=self.param.quantization_function,
                              coordinates_to_keep=self.param.coordinates_to_keep)
 
@@ -98,13 +98,13 @@ class DecGD:
                 # now iterate and update the estimate to X_tQ
                 for i in range(0, self.param.Q):
                     # Exchanging messages
-                    message_exchange = (self.model.x_estimate - self.model.Z)
+                    message_exchange = self.C.quantize(self.model.x_estimate - self.model.Z)
                     self.model.S = self.model.S + message_exchange @ self.W
                     # Compression error feedback
-                    error_feedback = (self.model.x_estimate - self.model.Z)
+                    error_feedback = self.C.quantize(self.model.x_estimate - self.model.Z)
                     self.model.Z = self.model.Z + error_feedback
                     # Local gossip update
-                    gossip_update = (self.model.S - self.model.Z)
+                    gossip_update = self.C.quantize(self.model.S - self.model.Z)
                     self.model.x_estimate = self.model.x_estimate + \
                         self.param.consensus_lr * gossip_update
             elif self.param.algorithm == 'choco-sgd':
