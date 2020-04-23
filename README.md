@@ -1,11 +1,13 @@
 # Linearly Convergent Decentralized Learning with Arbitrary Communication Compression
 
-
+How do I run the Code? 
 ```
-To Run the code:
-
+A. Install our package: 
 pip3 install decopt
-python3 driver.py
 
-[ assuming you have data downloaded properly and want to use the default hyper-params ]
+B. Get Data: 
+sh pull_data.sh breast_cancer
+
+c. Run script with default parameters: 
+python3 driver.py
 ```
