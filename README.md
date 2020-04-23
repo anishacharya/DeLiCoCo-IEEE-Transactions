@@ -1,4 +1,4 @@
-# decentralized-opt
+# Linearly Convergent Decentralized Learning with Arbitrary Communication Compression
 
 
 ```
