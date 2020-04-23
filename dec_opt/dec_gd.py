@@ -116,7 +116,7 @@ class DecGD:
                 pass
             else:
                 # do nothing just plain GD
-                self.model.x_estimate = self.model.x_cap
+                self.model.x_estimate = x_cap
 
             losses[epoch + 1] = self.model.loss(self.A, self.y)
             pred = self.model.predict(A=self.A)
