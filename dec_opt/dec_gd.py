@@ -101,7 +101,8 @@ class DecGD:
                     message_exchange = self.C.quantize(self.model.x_estimate - self.model.Z)
                     self.model.S = self.model.S + message_exchange @ self.W
                     # Compression error feedback
-                    error_feedback = self.C.quantize(self.model.x_estimate - self.model.Z)
+                    # error_feedback = self.C.quantize(self.model.x_estimate - self.model.Z)
+                    error_feedback = message_exchange
                     self.model.Z = self.model.Z + error_feedback
                     # Local gossip update
                     gossip_update = self.C.quantize(self.model.S - self.model.Z)

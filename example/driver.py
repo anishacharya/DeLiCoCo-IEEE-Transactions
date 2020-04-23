@@ -1,11 +1,10 @@
 import argparse
 import os
 import time
-
 from dec_opt.data_reader import DataReader
 from dec_opt.dec_gd import DecGD
 from dec_opt.logistic_regression import LogisticRegression
-
+import numpy as np
 import matplotlib.pyplot as plt
 
 """
@@ -28,22 +27,29 @@ def _parse_args():
     parser.add_argument('--n_cores', type=int, default=10)
 
     parser.add_argument('--topology', type=str, default='ring')
-    parser.add_argument('--Q', type=int, default=10)
+    parser.add_argument('--Q', type=int, default=3)
     parser.add_argument('--consensus_lr', type=float, default=0.34)
 
     parser.add_argument('--quantization_function', type=str, default='top')
     parser.add_argument('--num_levels', type=int, default=10)
-    parser.add_argument('--coordinates_to_keep', type=int, default=20)
+    parser.add_argument('--coordinates_to_keep', type=int, default=5)
 
-    parser.add_argument('--epochs', type=int, default=5000)
+    parser.add_argument('--epochs', type=int, default=1000)
     parser.add_argument('--lr_type', type=str, default='constant')
-    parser.add_argument('--initial_lr', type=float, default=0.01)
+    parser.add_argument('--initial_lr', type=float, default=0.0001)
     parser.add_argument('--epoch_decay_lr', type=float, default=0.9)
-    parser.add_argument('--regularizer', type=float, default=0)
+    parser.add_argument('--regularizer', type=float, default=0.2)
 
     parser.add_argument('--estimate', type=str, default='final')
     args = parser.parse_args()
     return args
+
+# TODO:
+#  For Each Data-set in [MNIST, CIFAR10]
+#  Vary Compression : *Pruning  *Quantization
+#  Vary Topology
+#  Vary Q values
+#  Vary n_cores
 
 
 if __name__ == '__main__':
@@ -70,8 +76,13 @@ if __name__ == '__main__':
                    hyper_param=args,
                    model=model)
     print("Now we can plot losses")
-    plt.plot(dec_gd.epoch_losses)
+    # fig = plt.figure()
+    # ax = fig.add_subplot(2, 1, 1)
+    # line, = ax.plot(dec_gd.epoch_losses, color='blue', lw=2)
+    # ax.set_yscale('log')
+    plt.plot(np.log(dec_gd.epoch_losses))
     plt.show()
+    # pylab.show()
 
 
 
