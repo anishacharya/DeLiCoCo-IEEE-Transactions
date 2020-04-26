@@ -65,7 +65,7 @@ class LogisticRegression:
         diff = predicted_labels - actual_labels
         return 1.0 - (float(np.count_nonzero(diff)) / len(diff))
 
-    def get_grad(self, A, y, stochastic: bool, indices: Dict, machine: int):
+    def get_grad(self, machine: int, A, y, stochastic: bool, indices: Dict):
         x = self.x_estimate[:, machine]
         if stochastic:
             # compute stochastic gradient

@@ -1,5 +1,7 @@
 import numpy as np
 import time
+from multiprocessing import Pool
+from functools import partial
 
 from dec_opt.gossip_matrix import GossipMatrix
 from dec_opt.compression import Compression
@@ -76,14 +78,25 @@ class DecGD:
             # --------------------------
             x_plus = np.zeros_like(self.model.x_estimate)
             #  for t in 0...T − 1 do in parallel for all workers i ∈[n]
-            for machine in range(0, self.param.n_cores):
-                # Compute neg. Gradient (or stochastic gradient) based on algorithm
-                minus_grad = self.model.get_grad(A=self.A,
-                                                 y=self.y,
-                                                 stochastic=self.param.stochastic,
-                                                 indices=self.data_partition_ix,
-                                                 machine=machine)
-                x_plus[:, machine] = lr * minus_grad
+            # for machine in range(0, self.param.n_cores):
+            #     # Compute neg. Gradient (or stochastic gradient) based on algorithm
+            #     minus_grad = self.model.get_grad(A=self.A,
+            #                                      y=self.y,
+            #                                      stochastic=self.param.stochastic,
+            #                                      indices=self.data_partition_ix,
+            #                                      machine=machine)
+            #     x_plus[:, machine] = lr * minus_grad
+            machine = range(0, self.param.n_cores)
+            pool = Pool(processes=self.param.n_proc)
+            get_grad_multi = partial(self.model.get_grad,
+                                     A=self.A,
+                                     y=self.y,
+                                     stochastic=self.param.stochastic,
+                                     indices=self.data_partition_ix)
+            minus_grad_list = pool.map(get_grad_multi, machine)
+            pool.close()
+            for i in range(0, self.param.n_cores):
+                x_plus[:, i] = lr * minus_grad_list[i]
             # x_(t+1/2) = x_(t) - lr * grad - Do GD Update
             x_cap = self.model.x_estimate + x_plus
 
