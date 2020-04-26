@@ -11,6 +11,8 @@ sh pull_data.sh breast_cancer
 c. Run script with default parameters: 
 python3 driver.py
 
+With different parameters:
+python3 driver.py --d 'mnist' --n_cores 10 --algorithms 'ours'
 Parameter Options:
 
     parser.add_argument('--d', type=str, default='breast_cancer',
