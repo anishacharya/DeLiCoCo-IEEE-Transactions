@@ -12,7 +12,8 @@ c. Run script with default parameters:
 python3 driver.py
 
 Parameter Options:
-parser.add_argument('--d', type=str, default='breast_cancer',
+
+    parser.add_argument('--d', type=str, default='breast_cancer',
                         help='Pass data-set')
     parser.add_argument('--r', type=str, default=os.path.join(curr_dir, './data/'),
                         help='Pass data root')
