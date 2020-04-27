@@ -37,7 +37,7 @@ def _parse_args():
 
     parser.add_argument('--epochs', type=int, default=10)
     parser.add_argument('--lr_type', type=str, default='constant')
-    parser.add_argument('--initial_lr', type=float, default=0.001)
+    parser.add_argument('--initial_lr', type=float, default=0.01)
     parser.add_argument('--epoch_decay_lr', type=float, default=0.9)
     parser.add_argument('--regularizer', type=float, default=0.1)
 

@@ -64,6 +64,7 @@ class LogisticRegression:
 
     @staticmethod
     def accuracy(predicted_labels, actual_labels):
+        predicted_labels = predicted_labels.reshape(predicted_labels.shape[0], 1)
         diff = predicted_labels - actual_labels
         return 1.0 - (float(np.count_nonzero(diff)) / len(diff))
 
