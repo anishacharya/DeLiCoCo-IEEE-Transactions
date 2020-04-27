@@ -20,10 +20,12 @@ class LogisticRegression:
         x = np.mean(x, axis=1)
         predictions = self.predict(A=A)
 
+        predictions = predictions.reshape(predictions.shape[0], 1)
+
         # Take the error when label=1
-        class1_cost = np.multiply(-y, np.log(predictions))
+        class1_cost = -y * np.log(predictions)
         # Take the error when label=0
-        class2_cost = np.multiply((1 - y), np.log(1 - predictions))
+        class2_cost = (1 - y) * np.log(1 - predictions)
         loss = class1_cost - class2_cost
         loss = loss.sum() / A.shape[0]
 

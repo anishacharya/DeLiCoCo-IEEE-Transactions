@@ -31,13 +31,17 @@ class DataReader:
         mnist_train = datasets.MNIST(root=self.root, download=self.download, train=True, transform=trans)
         mnist_test = datasets.MNIST(root=self.root, download=self.download, train=False, transform=trans)
 
-        x_train = mnist_train.train_data.numpy().reshape(60000, 784).astype(np.float32)
-        y_train = mnist_train.train_labels.numpy().reshape(60000, 1).astype(np.float32)
+        x_train = mnist_train.train_data.numpy().reshape(60000, 784)
+        x_train_aug = np.ones((60000, 785))
+        x_train_aug[:, 0:784] = x_train
+        y_train = mnist_train.train_labels.numpy().reshape(60000, 1)
 
-        x_test = mnist_test.test_data.numpy().reshape(10000, 784).astype(np.float32)
-        y_test = mnist_test.test_labels.numpy().reshape(10000, 1).astype(np.float32)
+        x_test = mnist_test.test_data.numpy().reshape(10000, 784)
+        x_test_aug = np.ones((10000, 785))
+        x_test_aug[:, 0:784] = x_test
+        y_test = mnist_test.test_labels.numpy().reshape(10000, 1)
 
-        return x_train, y_train, x_test, y_test
+        return x_train_aug, y_train, x_test_aug, y_test
     
     def _get_cifar10(self):
         cifar10_train = datasets.CIFAR10(root='./data', download=self.download, train=True)
