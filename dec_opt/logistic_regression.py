@@ -79,17 +79,19 @@ class LogisticRegression:
 
         else:
             # compute full gradient
-            N = A.shape[1]
+            N = A.shape[0]
+
             # Get Predictions
             predictions = self.predict(A=A)
+            predictions = predictions.reshape(predictions.shape[0], 1)
             gradient = np.dot(A.T, predictions - y)
             gradient /= N
             minus_grad = - gradient
 
         if self.params.regularizer:
-            minus_grad -= self.params.regularizer * x
+            minus_grad -= self.params.regularizer * (x.reshape(x.shape[0], 1))
 
-        return minus_grad
+        return np.squeeze(minus_grad)
 
     # def update_estimate(self, t):
     #     t = int(t)  # to avoid overflow with np.int32

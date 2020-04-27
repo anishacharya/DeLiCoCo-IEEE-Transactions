@@ -26,20 +26,29 @@ class DataReader:
             raise NotImplementedError
 
     def _get_mnist(self):
-        trans = transforms.Normalize((0.1307,), (0.3081,))
+        trans = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])
 
-        mnist_train = datasets.MNIST(root=self.root, download=self.download, train=True, transform=trans)
-        mnist_test = datasets.MNIST(root=self.root, download=self.download, train=False, transform=trans)
+        mnist_train = datasets.MNIST(root=self.root, download=self.download, train=True)
+        mnist_test = datasets.MNIST(root=self.root, download=self.download, train=False)
 
         x_train = mnist_train.train_data.numpy().reshape(60000, 784)
+        x_train = x_train/255.0  # + 0.01 * np.ones((60000, 784))
         x_train_aug = np.ones((60000, 785))
         x_train_aug[:, 0:784] = x_train
         y_train = mnist_train.train_labels.numpy().reshape(60000, 1)
+        # convert to binary labels
+        y_train[y_train < 5] = 0
+        y_train[y_train >= 5] = 1
 
         x_test = mnist_test.test_data.numpy().reshape(10000, 784)
+        x_test = x_test/255.0
         x_test_aug = np.ones((10000, 785))
         x_test_aug[:, 0:784] = x_test
         y_test = mnist_test.test_labels.numpy().reshape(10000, 1)
+
+        # convert to binary labels
+        y_test[y_test < 5] = 0
+        y_test[y_test >= 5] = 1
 
         return x_train_aug, y_train, x_test_aug, y_test
     
