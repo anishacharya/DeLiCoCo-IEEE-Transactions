@@ -59,6 +59,16 @@ class Compression:
                 bin_i = np.random.binomial(1, p, (q.shape[0],))
                 q[:, i] = x[:, i] * bin_i
             return (q/p)
+        # NEW--
+        if self.quantization_function == 'qsgd-abol':
+            q = np.zeros_like(x)
+            s = self.num_levels
+            tau = 1 + min((np.sqrt(q.shape[0])/s), (q.shape[0]/(s**2)))
+            for i in range(0, q.shape[1]):
+                unif_i = np.random.rand(q.shape[0],)
+                x_i = x[:, i]
+                q[:, i] = ((np.sign(x_i) * np.linalg.norm(x_i))/(s*tau)) * np.floor((s*np.abs(x_i)/np.linalg.norm(x_i)) + unif_i)
+            return q
 
         '''
         assert self.quantization_function in ['random-biased', 'random-unbiased']
