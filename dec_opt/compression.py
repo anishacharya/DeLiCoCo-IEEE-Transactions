@@ -33,6 +33,14 @@ class Compression:
                 indexes = np.argsort(np.abs(x[:, i]))[::-1]
                 q[indexes[:k], i] = x[indexes[:k], i]
             return q
+        # NEW--
+        if self.quantization_function == 'rand':
+            q = np.zeros_like(x)
+            k = self.coordinates_to_keep
+            for i in range(0, q.shape[1]):
+                perm_i = np.random.permutation(q.shape[0])
+                q[perm_i[0:k], i] = x[perm_i[0:k], i]
+            return q
 
         assert self.quantization_function in ['random-biased', 'random-unbiased']
         Q = np.zeros_like(x)
