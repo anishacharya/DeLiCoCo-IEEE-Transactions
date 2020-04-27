@@ -1,4 +1,5 @@
 import torchvision.datasets as datasets
+from torchvision import transforms
 from sklearn.model_selection import train_test_split
 from sklearn.datasets import load_breast_cancer
 from sklearn.utils import shuffle
@@ -25,8 +26,11 @@ class DataReader:
             raise NotImplementedError
 
     def _get_mnist(self):
-        mnist_train = datasets.MNIST(root=self.root, download=self.download, train=True)
-        mnist_test = datasets.MNIST(root=self.root, download=self.download, train=False)
+        trans = transforms.Normalize((0.1307,), (0.3081,))
+
+        mnist_train = datasets.MNIST(root=self.root, download=self.download, train=True, transform=trans)
+        mnist_test = datasets.MNIST(root=self.root, download=self.download, train=False, transform=trans)
+
         x_train = mnist_train.train_data.numpy().reshape(60000, 784).astype(np.float32)
         y_train = mnist_train.train_labels.numpy().reshape(60000, 1).astype(np.float32)
 
