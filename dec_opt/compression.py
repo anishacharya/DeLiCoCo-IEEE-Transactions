@@ -43,6 +43,22 @@ class Compression:
                 perm_i = np.random.permutation(q.shape[0])
                 q[perm_i[0:k], i] = x[perm_i[0:k], i]
             return q
+        # NEW--
+        if self.quantization_function == 'dropout-biased':
+            q = np.zeros_like(x)
+            p = self.dropout_p
+            for i in range(0, q.shape[1]):
+                bin_i = np.random.binomial(1, p, (q.shape[0],))
+                q[:, i] = x[:, i] * bin_i
+            return q
+        # NEW--
+        if self.quantization_function == 'dropout-unbiased':
+            q = np.zeros_like(x)
+            p = self.dropout_p
+            for i in range(0, q.shape[1]):
+                bin_i = np.random.binomial(1, p, (q.shape[0],))
+                q[:, i] = x[:, i] * bin_i
+            return (q/p)
 
         assert self.quantization_function in ['random-biased', 'random-unbiased']
         Q = np.zeros_like(x)
