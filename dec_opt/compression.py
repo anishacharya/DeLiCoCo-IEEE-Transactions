@@ -9,10 +9,12 @@ Contact: anishacharya@utexas.edu
 class Compression:
     def __init__(self, num_levels: int,
                  quantization_function: str,
+                 dropout_p: float,
                  coordinates_to_keep: int):
         self.quantization_function = quantization_function
         self.num_levels = num_levels
         self.coordinates_to_keep = coordinates_to_keep
+        self.dropout_p = dropout_p
 
     def quantize(self, x):
         # quantize according to quantization function
