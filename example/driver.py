@@ -29,7 +29,7 @@ def _parse_args():
 
     parser.add_argument('--topology', type=str, default='ring')
     parser.add_argument('--Q', type=int, default=3)
-    parser.add_argument('--consensus_lr', type=float, default=0.2)
+    parser.add_argument('--consensus_lr', type=float, default=0.1)
 
     parser.add_argument('--quantization_function', type=str, default='top')
     parser.add_argument('--num_levels', type=int, default=10)
