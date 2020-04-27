@@ -60,6 +60,7 @@ class Compression:
                 q[:, i] = x[:, i] * bin_i
             return (q/p)
 
+        '''
         assert self.quantization_function in ['random-biased', 'random-unbiased']
         Q = np.zeros_like(x)
         k = self.coordinates_to_keep
@@ -69,7 +70,8 @@ class Compression:
         if self.quantization_function == 'random-unbiased':
             return x.shape[0] / k * Q
         return Q
-
+        '''
+        
     @staticmethod
     def qsgd_quantize(x, d, is_biased):
         norm = np.sqrt(np.sum(np.square(x)))
