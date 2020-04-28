@@ -23,6 +23,7 @@ class DecGD:
         self.W = GossipMatrix(topology=self.param.topology, n_cores=self.param.n_cores).W
         self.C = Compression(num_levels=self.param.num_levels,
                              quantization_function=self.param.quantization_function,
+                             dropout_p=self.param.dropout_p,
                              coordinates_to_keep=self.param.coordinates_to_keep)
 
         # initialize parameters for each node. Ax = y is the problem we are solving
