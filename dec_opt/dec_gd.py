@@ -1,7 +1,5 @@
 import numpy as np
 import time
-from multiprocessing import Pool
-from functools import partial
 
 from dec_opt.gossip_matrix import GossipMatrix
 from dec_opt.compression import Compression
@@ -35,10 +33,12 @@ class DecGD:
         self.losses = np.zeros(self.param.epochs + 1)
         self.num_samples, self.num_features = self.A_train.shape
         INIT_WEIGHT_STD = 1 / self.num_features
+
         self.model.x_estimate = np.random.normal(0, INIT_WEIGHT_STD, size=(self.num_features,))
         self.model.x_estimate = np.tile(self.model.x_estimate, (self.param.n_cores, 1)).T
-        self.model.Z = np.copy(self.model.x_estimate)
-        self.model.S = np.copy(self.model.x_estimate)
+
+        self.model.Z = np.zeros(self.model.x_estimate.shape)
+        self.model.S = np.zeros(self.model.x_estimate.shape)
 
         # Now Distribute the Data among machines
         # ----------------------------------------
