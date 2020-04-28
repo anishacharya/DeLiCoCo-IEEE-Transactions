@@ -123,7 +123,7 @@ class DecGD:
                     error_feedback = message_exchange
                     self.model.Z = self.model.Z + error_feedback
                     # Local gossip update
-                    gossip_update = self.C.quantize(self.model.S - self.model.Z)
+                    gossip_update = (self.model.S - self.model.Z)
                     self.model.x_estimate = self.model.x_estimate + \
                         self.param.consensus_lr * gossip_update
             elif self.param.algorithm == 'choco-sgd':
