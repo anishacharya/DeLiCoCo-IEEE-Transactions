@@ -32,7 +32,7 @@ class DecGD:
         # ----------------------------------------------------------------------------------
         self.losses = np.zeros(self.param.epochs + 1)
         self.num_samples, self.num_features = self.A_train.shape
-        INIT_WEIGHT_STD = 1 / self.num_features
+        INIT_WEIGHT_STD = 1 / np.sqrt(self.num_features)
 
         self.model.x_estimate = np.random.normal(0, INIT_WEIGHT_STD, size=(self.num_features,))
         self.model.x_estimate = np.tile(self.model.x_estimate, (self.param.n_cores, 1)).T
