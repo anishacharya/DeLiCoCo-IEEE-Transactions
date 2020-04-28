@@ -15,11 +15,15 @@ np.random.seed(1)
 
 
 class DecGD:
-    def __init__(self, feature, target, hyper_param, model):
-        self.A = feature
-        self.y = target
+    def __init__(self, data_reader, hyper_param, model):
+        self.A_train = data_reader.A_train
+        self.y_train = data_reader.y_train
+        self.A_test = data_reader.A_test
+        self.y_test = data_reader.y_test
+
         self.param = hyper_param
         self.model = model
+
         self.W = GossipMatrix(topology=self.param.topology, n_cores=self.param.n_cores).W
         self.C = Compression(num_levels=self.param.num_levels,
                              quantization_function=self.param.quantization_function,
@@ -29,12 +33,10 @@ class DecGD:
         # initialize parameters for each node. Ax = y is the problem we are solving
         # ----------------------------------------------------------------------------------
         self.losses = np.zeros(self.param.epochs + 1)
-        self.num_samples, self.num_features = self.A.shape
+        self.num_samples, self.num_features = self.A_train.shape
         INIT_WEIGHT_STD = 1 / self.num_features
         self.model.x_estimate = np.random.normal(0, INIT_WEIGHT_STD, size=(self.num_features,))
         self.model.x_estimate = np.tile(self.model.x_estimate, (self.param.n_cores, 1)).T
-        # self.model.x_estimate = np.copy(self.model.x)
-        # self.model.x_hat = np.copy(self.model.x)
         self.model.Z = np.copy(self.model.x_estimate)
         self.model.S = np.copy(self.model.x_estimate)
 
@@ -44,7 +46,7 @@ class DecGD:
 
         # Decentralized Training
         # --------------------------
-        self.epoch_losses = self._dec_train()
+        self.train_losses, self.test_losses = self._dec_train()
 
     def _distribute_data(self):
         data_partition_ix = []
@@ -62,11 +64,13 @@ class DecGD:
         return data_partition_ix, num_samples_per_machine
 
     def _dec_train(self):
-        losses = np.zeros(self.param.epochs + 1)
-        losses[0] = self.model.loss(self.A, self.y)
+        train_losses = np.zeros(self.param.epochs + 1)
+        test_losses = np.zeros(self.param.epochs + 1)
+        train_losses[0] = self.model.loss(self.A_train, self.y_train)
+        test_losses[0] = self.model.loss(self.A_test, self.y_test)
         train_start = time.time()
         for epoch in np.arange(self.param.epochs):
-            loss = self.model.loss(self.A, self.y)
+            loss = self.model.loss(self.A_train, self.y_train)
             if np.isinf(loss) or np.isnan(loss):
                 print("training exit - diverging")
                 break
@@ -80,8 +84,8 @@ class DecGD:
             # for t in 0...T − 1 do in parallel for all workers i ∈[n]
             for machine in range(0, self.param.n_cores):
                 # Compute neg. Gradient (or stochastic gradient) based on algorithm
-                minus_grad = self.model.get_grad(A=self.A,
-                                                 y=self.y,
+                minus_grad = self.model.get_grad(A=self.A_train,
+                                                 y=self.y_train,
                                                  stochastic=self.param.stochastic,
                                                  indices=self.data_partition_ix,
                                                  machine=machine)
@@ -133,13 +137,22 @@ class DecGD:
                 # do nothing just plain GD
                 self.model.x_estimate = x_cap
 
-            losses[epoch + 1] = self.model.loss(self.A, self.y)
-            pred = self.model.predict(A=self.A)
-            pred_labels = self.model.classify(predictions=pred)
-            acc = self.model.accuracy(pred_labels, self.y)
-            print("epoch : {}; loss: {}; accuracy : {}".format(epoch, losses[epoch + 1], acc))
-            if np.isinf(losses[epoch + 1]) or np.isnan(losses[epoch + 1]):
+            train_losses[epoch + 1] = self.model.loss(self.A_train, self.y_train)
+            test_losses[epoch + 1] = self.model.loss(self.A_test, self.y_test)
+
+            train_acc = compute_accuracy(model=self.model, feature=self.A_train, target=self.y_train)
+            test_acc = compute_accuracy(model=self.model, feature=self.A_test, target=self.y_test)
+            print("epoch : {}; loss: {}; Train accuracy : {}".format(epoch, train_losses[epoch + 1], train_acc))
+            print("epoch : {}; loss: {}; Test accuracy : {}".format(epoch, test_losses[epoch + 1], test_acc))
+            if np.isinf(train_losses[epoch + 1]) or np.isnan(train_losses[epoch + 1]):
                 print("Break training - Diverged")
                 break
         print("Training took: {}s".format(time.time() - train_start))
-        return losses
+        return train_losses, test_losses
+
+
+def compute_accuracy(model, feature, target):
+    pred = model.predict(A=feature)
+    pred_labels = model.classify(predictions=pred)
+    acc = model.accuracy(pred_labels, target)
+    return acc
