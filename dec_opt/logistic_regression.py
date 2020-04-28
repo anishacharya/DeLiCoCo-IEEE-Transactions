@@ -73,19 +73,22 @@ class LogisticRegression:
         if stochastic:
             # compute stochastic gradient
             sample_idx = np.random.choice(indices[machine])
-            a = A[sample_idx]
-            minus_grad = y[sample_idx] * a * self.sigmoid(-y[sample_idx] * a.dot(x).squeeze())
-            if isspmatrix(a):
+            sliced_A = A[sample_idx]
+            minus_grad = y[sample_idx] * sliced_A * self.sigmoid(-y[sample_idx] * sliced_A.dot(x).squeeze())
+            if isspmatrix(sliced_A):
                 minus_grad = minus_grad.toarray().squeeze(0)
 
         else:
             # compute full gradient
-            N = A.shape[0]
+            data_ix = indices[machine]
+            sliced_A = A[data_ix, :]
+            sliced_y = y[data_ix]
+            N = sliced_A.shape[0]
 
             # Get Predictions
-            predictions = self.predict(A=A)
+            predictions = self.predict(A=sliced_A)
             predictions = predictions.reshape(predictions.shape[0], 1)
-            gradient = np.dot(A.T, predictions - y)
+            gradient = np.dot(sliced_A.T, predictions - sliced_y)
             gradient /= N
             minus_grad = - gradient
 
@@ -110,10 +113,9 @@ class LogisticRegression:
     #         self.x_estimate = self.x_estimate * (1 - rho) + self.x * rho
 
     def lr(self, epoch, iteration, num_samples):
-        t = epoch * num_samples + iteration
         if self.params.lr_type == 'constant':
             return self.params.initial_lr
-        elif self.params.lr_type == 'epoch-decay':
+        elif self.params.lr_type == 'epoch_decay':
             return self.params.initial_lr * (self.params.epoch_decay_lr ** epoch)
 
 

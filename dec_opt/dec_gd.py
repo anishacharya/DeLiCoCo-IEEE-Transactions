@@ -26,7 +26,7 @@ class DecGD:
         self.C = Compression(num_levels=self.param.num_levels,
                              quantization_function=self.param.quantization_function,
                              dropout_p=self.param.dropout_p,
-                             coordinates_to_keep=self.param.coordinates_to_keep)
+                             fraction_coordinates=self.param.fraction_coordinates)
 
         # initialize parameters for each node. Ax = y is the problem we are solving
         # ----------------------------------------------------------------------------------

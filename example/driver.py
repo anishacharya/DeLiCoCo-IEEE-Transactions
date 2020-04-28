@@ -24,23 +24,23 @@ def _parse_args():
     parser.add_argument('--stochastic', type=bool, default=False)
     parser.add_argument('--algorithm', type=str, default='ours')
 
-    parser.add_argument('--n_cores', type=int, default=100)
+    parser.add_argument('--n_cores', type=int, default=10)
     parser.add_argument('--n_proc', type=int, default=10)
 
     parser.add_argument('--topology', type=str, default='ring')
     parser.add_argument('--Q', type=int, default=5)
-    parser.add_argument('--consensus_lr', type=float, default=0.7)
+    parser.add_argument('--consensus_lr', type=float, default=0.2)
 
     parser.add_argument('--quantization_function', type=str, default='top')
     parser.add_argument('--num_levels', type=int, default=10)
-    parser.add_argument('--coordinates_to_keep', type=int, default=5)
+    parser.add_argument('--fraction_coordinates', type=int, default=0.5)
     parser.add_argument('--dropout_p', type=float, default=0.5)
 
-    parser.add_argument('--epochs', type=int, default=1000)
+    parser.add_argument('--epochs', type=int, default=2000)
     parser.add_argument('--lr_type', type=str, default='constant')
     parser.add_argument('--initial_lr', type=float, default=0.01)
     parser.add_argument('--epoch_decay_lr', type=float, default=0.9)
-    parser.add_argument('--regularizer', type=float, default=0.1)
+    parser.add_argument('--regularizer', type=float, default=0)
 
     parser.add_argument('--estimate', type=str, default='final')
     args = parser.parse_args()
@@ -81,8 +81,8 @@ if __name__ == '__main__':
     # ax = fig.add_subplot(2, 1, 1)
     # line, = ax.plot(dec_gd.epoch_losses, color='blue', lw=2)
     # ax.set_yscale('log')
-    plt.plot(np.log(dec_gd.train_losses))
-    plt.plot(np.log(dec_gd.test_losses))
+    plt.plot(dec_gd.train_losses)
+    plt.plot(dec_gd.test_losses)
     plt.show()
     # pylab.show()
 

@@ -10,10 +10,10 @@ class Compression:
     def __init__(self, num_levels: int,
                  quantization_function: str,
                  dropout_p: float,
-                 coordinates_to_keep: int):
+                 fraction_coordinates: float):
         self.quantization_function = quantization_function
         self.num_levels = num_levels
-        self.coordinates_to_keep = coordinates_to_keep
+        self.fraction_coordinates = fraction_coordinates
         self.dropout_p = dropout_p
 
     def quantize(self, x):
@@ -30,15 +30,15 @@ class Compression:
             return x
         if self.quantization_function == 'top':
             q = np.zeros_like(x)
-            k = self.coordinates_to_keep
+
+            k = round(self.fraction_coordinates * q.shape[1])
             for i in range(0, q.shape[1]):
                 indexes = np.argsort(np.abs(x[:, i]))[::-1]
                 q[indexes[:k], i] = x[indexes[:k], i]
             return q
-        # NEW--
         if self.quantization_function == 'rand':
             q = np.zeros_like(x)
-            k = self.coordinates_to_keep
+            k = round(self.fraction_coordinates * q.shape[1])
             for i in range(0, q.shape[1]):
                 perm_i = np.random.permutation(q.shape[0])
                 q[perm_i[0:k], i] = x[perm_i[0:k], i]
@@ -58,7 +58,7 @@ class Compression:
             for i in range(0, q.shape[1]):
                 bin_i = np.random.binomial(1, p, (q.shape[0],))
                 q[:, i] = x[:, i] * bin_i
-            return (q/p)
+            return q / p
         # NEW--
         if self.quantization_function == 'qsgd-abol':
             q = np.zeros_like(x)
