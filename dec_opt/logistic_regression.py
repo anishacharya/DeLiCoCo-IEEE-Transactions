@@ -34,29 +34,20 @@ class LogisticRegression:
             loss += self.params.regularizer * np.square(x).sum() / 2
         return loss
 
-    def predict(self, A):
+    def predict(self, A, machine=None):
         """
           Returns 1D array of probabilities
           that the class label == 1
         """
-        x = np.copy(self.x_estimate)
-        x = np.mean(x, axis=1)
-
+        if machine is None:
+            x = np.copy(self.x_estimate)
+            x = np.mean(x, axis=1)
+        else:
+            x = self.x_estimate[:, machine]
         logits = A @ x
         pred = self.sigmoid(logits)
         return pred
     
-    def predict_local(self, A, machine):
-        """
-          Returns 1D array of probabilities
-          that the class label == 1
-        """
-        x = self.x_estimate[:, machine]
-
-        logits = A @ x
-        pred = self.sigmoid(logits)
-        return pred
-
     @staticmethod
     def decision_boundary(prob):
         return 1 if prob >= .5 else 0
@@ -97,7 +88,7 @@ class LogisticRegression:
             N = sliced_A.shape[0]
 
             # Get Predictions
-            predictions = self.predict_local(A=sliced_A, machine=machine)
+            predictions = self.predict(A=sliced_A, machine=machine)
             predictions = predictions.reshape(predictions.shape[0], 1)
             gradient = np.dot(sliced_A.T, predictions - sliced_y)
             gradient /= N
