@@ -33,7 +33,7 @@ def _parse_args():
 
     parser.add_argument('--quantization_function', type=str, default='top')
     parser.add_argument('--num_levels', type=int, default=10)
-    parser.add_argument('--fraction_coordinates', type=int, default=0.5)
+    parser.add_argument('--fraction_coordinates', type=float, default=0.1)
     parser.add_argument('--dropout_p', type=float, default=0.5)
 
     parser.add_argument('--epochs', type=int, default=2000)
