@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="decopt",  # Replace with your own username
-    version="1.0.7",
+    version="1.0.8",
     author="Anish Acharya",
     author_email="anishacharya@utexas.edu",
     description="State of the art decentralized optimization library",
