@@ -52,7 +52,7 @@ class DecGD:
         data_partition_ix = []
         num_samples_per_machine = self.num_samples // self.param.n_cores
         all_indexes = np.arange(self.num_samples)
-        np.random.shuffle(all_indexes)
+        # np.random.shuffle(all_indexes)
 
         for machine in range(0, self.param.n_cores - 1):
             data_partition_ix += [
