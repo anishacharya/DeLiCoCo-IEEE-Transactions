@@ -26,7 +26,7 @@ class DataReader:
         else:
             raise NotImplementedError
 
-    def _get_mnist(self):
+    def _get_mnist(self, do_sorting=True):
         mnist_train = datasets.MNIST(root=self.root, download=self.download, train=True)
         mnist_test = datasets.MNIST(root=self.root, download=self.download, train=False)
 
@@ -45,6 +45,11 @@ class DataReader:
         y_test[y_test < 5] = 0
         y_test[y_test >= 5] = 1
 
+        if do_sorting:
+            y_sorted_ix = np.argsort(y_train)
+            x_train = x_train[y_sorted_ix]
+            y_train = y_train[y_sorted_ix]
+
         y_train = y_train.reshape(y_train.shape[0], 1)
         y_test = y_test.reshape(y_test.shape[0], 1)
 
@@ -57,7 +62,7 @@ class DataReader:
 
         return x_train_aug, y_train, x_test_aug, y_test
     
-    def _get_cifar10(self):
+    def _get_cifar10(self, do_sorting=True):
         cifar10_train = datasets.CIFAR10(root='./data', download=self.download, train=True)
         cifar10_test = datasets.CIFAR10(root='./data', download=self.download, train=False)
 
@@ -82,6 +87,11 @@ class DataReader:
         x_train = x_train.reshape(x_train.shape[0], x_train.shape[1]*x_train.shape[2])
         x_test = x_test.reshape(x_test.shape[0], x_test.shape[1]*x_test.shape[2])
 
+        if do_sorting:
+            y_sorted_ix = np.argsort(y_train)
+            x_train = x_train[y_sorted_ix]
+            y_train = y_train[y_sorted_ix]
+
         # Now add the Bias term - Add a Fake dim of all 1s to the parameters
         x_train_aug = np.ones((x_train.shape[0], x_train.shape[1] + 1))
         x_train_aug[:, 0:x_train.shape[1]] = x_train
@@ -92,7 +102,7 @@ class DataReader:
         return x_train_aug, y_train, x_test_aug, y_test
         
     @staticmethod
-    def _get_breast_cancer(test_split):
+    def _get_breast_cancer(test_split, do_sorting=True):
         print('Reading Breast Cancer Data')
         t0 = time.time()
         data_bunch = load_breast_cancer()
@@ -102,6 +112,11 @@ class DataReader:
         x, y = shuffle(x, y)
 
         x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=test_split)
+
+        if do_sorting:
+            y_sorted_ix = np.argsort(y_train)
+            x_train = x_train[y_sorted_ix]
+            y_train = y_train[y_sorted_ix]
 
         y_train = y_train.reshape(y_train.shape[0], 1)
         y_test = y_test.reshape(y_test.shape[0], 1)
