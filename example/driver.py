@@ -4,7 +4,6 @@ import time
 from dec_opt.data_reader import DataReader
 from dec_opt.dec_gd import DecGD
 from dec_opt.logistic_regression import LogisticRegression
-import numpy as np
 import matplotlib.pyplot as plt
 
 """
@@ -29,16 +28,16 @@ def _parse_args():
 
     parser.add_argument('--topology', type=str, default='ring')
     parser.add_argument('--Q', type=int, default=2)
-    parser.add_argument('--consensus_lr', type=float, default=0.1)
+    parser.add_argument('--consensus_lr', type=float, default=0.3)
 
-    parser.add_argument('--quantization_function', type=str, default='top')
+    parser.add_argument('--quantization_function', type=str, default='full')
     parser.add_argument('--num_levels', type=int, default=10)
-    parser.add_argument('--fraction_coordinates', type=float, default=0.3)
+    parser.add_argument('--fraction_coordinates', type=float, default=0.1)
     parser.add_argument('--dropout_p', type=float, default=0.1)
 
-    parser.add_argument('--epochs', type=int, default=10)
+    parser.add_argument('--epochs', type=int, default=50)
     parser.add_argument('--lr_type', type=str, default='constant')
-    parser.add_argument('--initial_lr', type=float, default=0.1)
+    parser.add_argument('--initial_lr', type=float, default=0.01)
     parser.add_argument('--epoch_decay_lr', type=float, default=0.9)
     parser.add_argument('--regularizer', type=float, default=0)
 
@@ -56,7 +55,7 @@ def _parse_args():
 
 if __name__ == '__main__':
     args = _parse_args()
-    print(args)
+
     data_set = args.d
     root = args.r
 
@@ -72,19 +71,20 @@ if __name__ == '__main__':
     print('Time taken to load Data {} sec'.format(time.time() - t0))
 
     """ Run Experiment """
+    Loss_Plots = []
     model = LogisticRegression(params=args)
-    dec_gd = DecGD(data_reader=data_reader,
-                   hyper_param=args,
-                   model=model)
+    for quantization_function in ['full', 'rand', 'top']:
+        args.quantization_function = quantization_function
+        print(args)
+        dec_gd = DecGD(data_reader=data_reader,
+                       hyper_param=args,
+                       model=model)
+        Loss_Plots.append(dec_gd.train_losses)
     print("Now we can plot losses")
-    # fig = plt.figure()
-    # ax = fig.add_subplot(2, 1, 1)
-    # line, = ax.plot(dec_gd.epoch_losses, color='blue', lw=2)
-    # ax.set_yscale('log')
-    plt.plot(dec_gd.train_losses)
-    plt.plot(dec_gd.test_losses)
+    for train_losses in Loss_Plots:
+        plt.plot(train_losses)
+    # plt.plot(dec_gd.test_losses)
     plt.show()
-    # pylab.show()
 
 
 
