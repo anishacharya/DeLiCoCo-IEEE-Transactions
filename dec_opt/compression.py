@@ -31,14 +31,14 @@ class Compression:
         if self.quantization_function == 'top':
             q = np.zeros_like(x)
 
-            k = round(self.fraction_coordinates * q.shape[1])
+            k = round(self.fraction_coordinates * q.shape[0])
             for i in range(0, q.shape[1]):
                 indexes = np.argsort(np.abs(x[:, i]))[::-1]
                 q[indexes[:k], i] = x[indexes[:k], i]
             return q
         if self.quantization_function == 'rand':
             q = np.zeros_like(x)
-            k = round(self.fraction_coordinates * q.shape[1])
+            k = round(self.fraction_coordinates * q.shape[0])
             for i in range(0, q.shape[1]):
                 perm_i = np.random.permutation(q.shape[0])
                 q[perm_i[0:k], i] = x[perm_i[0:k], i]

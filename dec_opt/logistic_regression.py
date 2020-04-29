@@ -90,7 +90,7 @@ class LogisticRegression:
             # Get Predictions
             predictions = self.predict(A=sliced_A, machine=machine)
             predictions = predictions.reshape(predictions.shape[0], 1)
-            gradient = np.dot(sliced_A.T, predictions - sliced_y)
+            gradient = sliced_A.T @ (predictions - sliced_y)
             gradient /= N
             minus_grad = - gradient
 
