@@ -48,9 +48,8 @@ def _parse_args():
 # TODO:
 #  For Each Data-set in [MNIST, CIFAR10]
 #  Vary Compression : *Pruning  *Quantization
-#  Vary Topology
-#  Vary Q values
-#  Vary n_cores
+#  Vary Topology : Vary n_cores
+#  Vary Q values : Vary n_cores
 
 
 if __name__ == '__main__':
