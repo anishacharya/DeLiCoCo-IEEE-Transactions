@@ -41,8 +41,11 @@ def _parse_args():
     parser.add_argument('--regularizer', type=float, default=0)
 
     parser.add_argument('--estimate', type=str, default='final')
+    parser.add_argument('--n_proc', type=int, default=3)
+    parser.add_argument('--n_repeat', type=int, default=3)
     args = parser.parse_args()
     return args
+
 
 # TODO:
 #  For Each Data-set in [MNIST, CIFAR10]
@@ -52,29 +55,21 @@ def _parse_args():
 
 
 if __name__ == '__main__':
-    # define experiment directory
-    # Load default arguments
     arg = _parse_args()
-    # Define Directory and result file name
     directory = "results/" + arg.d + "/"
     if not os.path.exists(directory):
         os.makedirs(directory)
+    result_file = arg.algorithm + "." + str(arg.n_cores) + '.' + \
+        arg.topology + '.' + str(arg.Q) + '.' + arg.quantization_function
 
-    # DO Experiments here :
-    # change arguments as needed for the experiment
-    arg.topology = 'torus'
     model = LogisticRegression(params=arg)
-    n_repeat = 3
-    n_proc = n_repeat
     args = []
-    for random_seed in np.arange(1, n_repeat + 1):
+    for random_seed in np.arange(1, arg.n_repeat + 1):
         args += [arg]
-    with mp.Pool(n_proc) as pool:
+    with mp.Pool(arg.n_proc) as pool:
         results = pool.map(run_exp, args)  # results = [res: {[train_loss], [test_loss]}] for all n_repeat
 
     # Dumps the results in appropriate files
-    result_file = arg.algorithm + "." + str(arg.n_cores) + '.' + \
-        arg.topology + '.' + str(arg.Q) + '.' + arg.quantization_function
-    pickle_it(arg, 'parameters.'+result_file, directory)
+    pickle_it(arg, 'parameters.' + result_file, directory)
     pickle_it(results, result_file, directory)
     print('results saved in "{}"'.format(directory))
