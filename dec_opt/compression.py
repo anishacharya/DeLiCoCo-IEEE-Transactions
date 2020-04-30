@@ -7,12 +7,12 @@ Contact: anishacharya@utexas.edu
 
 
 class Compression:
-    def __init__(self, num_levels: int,
+    def __init__(self, num_bits: int,
                  quantization_function: str,
                  dropout_p: float,
                  fraction_coordinates: float):
         self.quantization_function = quantization_function
-        self.num_levels = num_levels
+        self.num_bits = num_bits
         self.fraction_coordinates = fraction_coordinates
         self.dropout_p = dropout_p
 
@@ -21,10 +21,10 @@ class Compression:
         # x: shape(num_features, n_cores)
         if self.quantization_function in ['qsgd-biased', 'qsgd-unbiased']:
             is_biased = (self.quantization_function == 'qsgd-biased')
-            assert self.num_levels
+            assert self.num_bits
             q = np.zeros_like(x)
             for i in range(0, q.shape[1]):
-                q[:, i] = self.qsgd_quantize(x[:, i], self.num_levels, is_biased)
+                q[:, i] = self.qsgd_quantize(x[:, i], self.num_bits, is_biased)
             return q
         if self.quantization_function == 'full':
             return x
@@ -62,7 +62,8 @@ class Compression:
         # NEW--
         if self.quantization_function == 'qsgd-abol':
             q = np.zeros_like(x)
-            s = self.num_levels
+            bits = self.num_bits
+            s = 2 ** bits
             tau = 1 + min((np.sqrt(q.shape[0])/s), (q.shape[0]/(s**2)))
             for i in range(0, q.shape[1]):
                 unif_i = np.random.rand(q.shape[0],)

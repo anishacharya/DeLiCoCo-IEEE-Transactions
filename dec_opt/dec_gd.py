@@ -23,7 +23,7 @@ class DecGD:
         self.model = model
 
         self.W = GossipMatrix(topology=self.param.topology, n_cores=self.param.n_cores).W
-        self.C = Compression(num_levels=self.param.num_levels,
+        self.C = Compression(num_bits=self.param.num_bits,
                              quantization_function=self.param.quantization_function,
                              dropout_p=self.param.dropout_p,
                              fraction_coordinates=self.param.fraction_coordinates)

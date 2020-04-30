@@ -4,6 +4,7 @@ from dec_opt.utils import pickle_it
 from dec_opt.experiment import run_exp
 import numpy as np
 import multiprocessing as mp
+from dec_opt.logistic_regression import LogisticRegression
 
 """
 Author: Anish Acharya
@@ -29,7 +30,7 @@ def _parse_args():
     parser.add_argument('--consensus_lr', type=float, default=0.3)
 
     parser.add_argument('--quantization_function', type=str, default='full')
-    parser.add_argument('--num_levels', type=int, default=10)
+    parser.add_argument('--num_bits', type=int, default=2)
     parser.add_argument('--fraction_coordinates', type=float, default=0.1)
     parser.add_argument('--dropout_p', type=float, default=0.1)
 
@@ -58,7 +59,7 @@ if __name__ == '__main__':
     directory = "results/" + arg.d + "/"
     if not os.path.exists(directory):
         os.makedirs(directory)
-
+    model = LogisticRegression(params=arg)
     # DO Experiments here :
     # change arguments as needed for the experiment
     arg.topology = 'torus'
