@@ -66,11 +66,13 @@ if __name__ == '__main__':
 
     model = LogisticRegression(params=arg)
     args = []
+    results = []
     for random_seed in np.arange(1, arg.n_repeat + 1):
         arg.seed = random_seed
-        args += [arg]
-    with mp.Pool(arg.n_proc) as pool:
-        results = pool.map(partial(run_exp, model=model), args)
+        results.append(run_exp(model=model, args=arg))
+        # args += [arg]
+    # with mp.Pool(arg.n_proc) as pool:
+    #     results = pool.map(partial(run_exp, model=model), args)
 
     # Dumps the results in appropriate files
     pickle_it(arg, 'parameters.' + result_file, directory)
