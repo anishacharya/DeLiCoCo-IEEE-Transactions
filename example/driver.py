@@ -59,11 +59,11 @@ if __name__ == '__main__':
     directory = "results/" + arg.d + "/"
     if not os.path.exists(directory):
         os.makedirs(directory)
-    model = LogisticRegression(params=arg)
+
     # DO Experiments here :
     # change arguments as needed for the experiment
     arg.topology = 'torus'
-
+    model = LogisticRegression(params=arg)
     n_repeat = 3
     n_proc = n_repeat
     args = []
