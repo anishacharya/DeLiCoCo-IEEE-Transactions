@@ -42,8 +42,9 @@ def _parse_args():
     parser.add_argument('--regularizer', type=float, default=0)
 
     parser.add_argument('--estimate', type=str, default='final')
-    parser.add_argument('--n_proc', type=int, default=3)
-    parser.add_argument('--n_repeat', type=int, default=3)
+    parser.add_argument('--n_proc', type=int, default=5)
+    parser.add_argument('--n_repeat', type=int, default=5)
+    parser.add_argument('--seed', type=int, default=1)
     args = parser.parse_args()
     return args
 
@@ -66,6 +67,7 @@ if __name__ == '__main__':
     model = LogisticRegression(params=arg)
     args = []
     for random_seed in np.arange(1, arg.n_repeat + 1):
+        arg.seed = random_seed
         args += [arg]
     with mp.Pool(arg.n_proc) as pool:
         results = pool.map(partial(run_exp, model=model), args)

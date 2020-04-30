@@ -13,7 +13,7 @@ def plot_results(repeats, label, plot='train'):
     LB = mean - np.std(scores, axis=0)
     x = np.arange(mean.shape[0])
     plt.plot(x, mean, label=label)
-    plt.fill_between(x, UB, LB)
+    plt.fill_between(x, LB, UB, alpha=0.2)
 
 
 if __name__ == '__main__':
