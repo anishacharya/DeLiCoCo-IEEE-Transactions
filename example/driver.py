@@ -4,6 +4,7 @@ from dec_opt.utils import pickle_it
 from dec_opt.experiment import run_exp
 import numpy as np
 import multiprocessing as mp
+from functools import partial
 from dec_opt.logistic_regression import LogisticRegression
 
 """
@@ -67,7 +68,7 @@ if __name__ == '__main__':
     for random_seed in np.arange(1, arg.n_repeat + 1):
         args += [arg]
     with mp.Pool(arg.n_proc) as pool:
-        results = pool.map(run_exp, args)  # results = [res: {[train_loss], [test_loss]}] for all n_repeat
+        results = pool.map(partial(run_exp, model=model), args)
 
     # Dumps the results in appropriate files
     pickle_it(arg, 'parameters.' + result_file, directory)
