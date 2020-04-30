@@ -2,6 +2,8 @@ import argparse
 import os
 from dec_opt.utils import pickle_it
 from dec_opt.experiment import run_exp
+import numpy as np
+import multiprocessing as mp
 
 """
 Author: Anish Acharya
@@ -60,25 +62,18 @@ if __name__ == '__main__':
     # DO Experiments here :
     # change arguments as needed for the experiment
     arg.topology = 'torus'
-    res = run_exp(args=arg)  # res: {[train_loss], [test_loss]}
+
+    n_repeat = 3
+    n_proc = n_repeat
+    args = []
+    for random_seed in np.arange(1, n_repeat + 1):
+        args += [arg]
+    with mp.Pool(n_proc) as pool:
+        results = pool.map(run_exp, args)  # results = [res: {[train_loss], [test_loss]}] for all n_repeat
+
     # Dumps the results in appropriate files
-    result_file = arg.algorithm + "." + str(arg.n_cores) + arg.topology + str(arg.Q) + arg.quantization_function
+    result_file = arg.algorithm + "." + str(arg.n_cores) + '.' + \
+        arg.topology + '.' + str(arg.Q) + '.' + arg.quantization_function
     pickle_it(arg, 'parameters.'+result_file, directory)
-    pickle_it(res, result_file, directory)
+    pickle_it(results, result_file, directory)
     print('results saved in "{}"'.format(directory))
-    # Loss_Plots = []
-    # for quantization_function in ['full', 'rand', 'top']:
-    #     args.quantization_function = quantization_function
-    #     print(args)
-    #     train_loss, test_loss = run_exp(args=args)
-    #     Loss_Plots.append(train_loss)
-    # print("Now we can plot losses")
-    # for train_losses in Loss_Plots:
-    #     plt.plot(train_losses)
-    # # plt.plot(dec_gd.test_losses)
-    # plt.show()
-
-
-
-
-
