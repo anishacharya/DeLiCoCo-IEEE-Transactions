@@ -52,16 +52,16 @@ class DataReader:
         idx_test = np.argwhere(y_test % 5 == 4)
         
         # for 2 vs. 7
-        #idx_train = np.argwhere(y_train % 5 == 2)
-        #idx_test = np.argwhere(y_test % 5 == 2)
+        # idx_train = np.argwhere(y_train % 5 == 2)
+        # idx_test = np.argwhere(y_test % 5 == 2)
 
-        x_train = x_train[idx_train[:,0], :]
-        x_test = x_test[idx_test[:,0], :]
+        x_train = x_train[idx_train[:, 0], :]
+        x_test = x_test[idx_test[:, 0], :]
 
-        y_train = y_train[idx_train[:,0]]
+        y_train = y_train[idx_train[:, 0]]
         y_train[y_train == 4] = 0
         y_train[y_train == 9] = 1
-        y_test = y_test[idx_test[:,0]]
+        y_test = y_test[idx_test[:, 0]]
         y_test[y_test == 4] = 0
         y_test[y_test == 9] = 1
         

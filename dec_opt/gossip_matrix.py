@@ -31,17 +31,15 @@ class GossipMatrix:
         elif topology == 'disconnected':
             W = np.eye(nodes)
             return W
-        # elif topology == 'torus':
-        #     print('torus topology!')
-        #     assert topology == 'torus'
-        #     assert int(np.sqrt(nodes)) ** 2 == nodes
-        #     G = networkx.generators.lattice.grid_2d_graph(int(np.sqrt(nodes)),
-        #                                                   int(np.sqrt(nodes)), periodic=True)
-        #     W = networkx.adjacency_matrix(G).toarray()
-        #     for i in range(0, W.shape[0]):
-        #         W[i][i] = 1
-        #     W = W / 5
-        #     return W
+        elif topology == 'torus':
+            assert int(np.sqrt(nodes)) ** 2 == nodes
+            G = networkx.generators.lattice.grid_2d_graph(int(np.sqrt(nodes)),
+                                                          int(np.sqrt(nodes)), periodic=True)
+            W = networkx.adjacency_matrix(G).toarray()
+            for i in range(0, W.shape[0]):
+                W[i][i] = 1
+            W = W / 5
+            return W
         else:
             raise NotImplementedError
 
