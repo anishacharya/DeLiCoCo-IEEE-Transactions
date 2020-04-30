@@ -9,8 +9,6 @@ Author: Anish Acharya
 Contact: anishacharya@utexas.edu
 """
 
-np.random.seed(1)
-
 
 class DecGD:
     def __init__(self, data_reader, hyper_param, model):
