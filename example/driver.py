@@ -17,7 +17,7 @@ curr_dir = os.path.dirname(__file__)
 
 def _parse_args():
     parser = argparse.ArgumentParser(description='driver.py')
-    parser.add_argument('--d', type=str, default='breast_cancer',
+    parser.add_argument('--d', type=str, default='mnist',
                         help='Pass data-set')
     parser.add_argument('--r', type=str, default=os.path.join(curr_dir, './data/'),
                         help='Pass data root')
