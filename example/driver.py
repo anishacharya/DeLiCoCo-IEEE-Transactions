@@ -35,15 +35,15 @@ def _parse_args():
     parser.add_argument('--fraction_coordinates', type=float, default=0.1)
     parser.add_argument('--dropout_p', type=float, default=0.1)
 
-    parser.add_argument('--epochs', type=int, default=10)
+    parser.add_argument('--epochs', type=int, default=1500)
     parser.add_argument('--lr_type', type=str, default='constant')
-    parser.add_argument('--initial_lr', type=float, default=0.01)
+    parser.add_argument('--initial_lr', type=float, default=0.001)
     parser.add_argument('--epoch_decay_lr', type=float, default=0.9)
     parser.add_argument('--regularizer', type=float, default=0)
 
     parser.add_argument('--estimate', type=str, default='final')
-    parser.add_argument('--n_proc', type=int, default=5)
-    parser.add_argument('--n_repeat', type=int, default=5)
+    parser.add_argument('--n_proc', type=int, default=3)
+    parser.add_argument('--n_repeat', type=int, default=3)
     parser.add_argument('--seed', type=int, default=1)
     args = parser.parse_args()
     return args
@@ -51,7 +51,7 @@ def _parse_args():
 
 # TODO:
 #  For Each Data-set in [MNIST, CIFAR10]
-#  Vary Compression : *Pruning  *Quantization
+#  Vary Compression : *Pruning  *Quantization: Vary n_cores
 #  Vary Topology : Vary n_cores
 #  Vary Q values : Vary n_cores
 

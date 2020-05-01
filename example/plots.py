@@ -21,7 +21,8 @@ if __name__ == '__main__':
     # Follow this template to generate your own combination of plots
     # remember the naming convention of the results
     # Load all results of a particular data-set
-    data = unpickle_dir(d='./results/breast_cancer')
+    data = unpickle_dir(d='./results/syn')
+    baselines = unpickle_dir(d='./results/baselines')
     print('Loaded Data')
 
     # Now Lets
@@ -29,18 +30,11 @@ if __name__ == '__main__':
     fig = plt.gcf()
 
     # Specify what result runs you want to plot together
-    plot_results(repeats=data['ours.16.ring.0.top'], label='Boyd')
-    # plot_results(repeats=data['ours.16.ring.0.top'], label='Q=0')
-    plot_results(repeats=data['ours.16.ring.1.top'], label='Q=1')
-    plot_results(repeats=data['ours.16.ring.2.top'], label='Q=2')
-    plot_results(repeats=data['ours.16.ring.3.top'], label='Q=3')
-    plot_results(repeats=data['ours.16.ring.4.top'], label='Q=4')
-    plot_results(repeats=data['ours.16.ring.5.top'], label='Q=5')
-    plot_results(repeats=data['ours.16.ring.10.top'], label='Q=10')
-    plot_results(repeats=data['ours.16.ring.15.top'], label='Q=15')
-    # plot_results(repeats=data['ours.9.torus.2.full'], label='torus')
-    # plot_results(repeats=data['ours.9.ring.2.full'], label='ring')
-    # plot_results(repeats=data['ours.9.disconnected.2.full'], label='disconnected')
+
+    plot_results(repeats=data['ours.16.ring.1.full'], label='full')
+    plot_results(repeats=data['ours.16.ring.2.top'], label='top (fraction = 0.02)')
+    plot_results(repeats=data['ours.16.ring.2.rand'], label='rand (fraction = 0.02)')
+    plot_results(repeats=data['ours.16.ring.2.qsgd'], label='qsgd (bits = 2)')
 
     plt.legend()
     plt.show()
