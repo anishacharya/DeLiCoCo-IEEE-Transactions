@@ -1,6 +1,5 @@
 import numpy as np
 import time
-from tqdm import trange
 from dec_opt.gossip_matrix import GossipMatrix
 from dec_opt.compression import Compression
 
@@ -68,9 +67,7 @@ class DecGD:
         train_losses[0] = self.model.loss(self.A_train, self.y_train)
         test_losses[0] = self.model.loss(self.A_test, self.y_test)
         train_start = time.time()
-        t = trange(self.param.epochs)
-        # for epoch in np.arange(self.param.epochs):
-        for epoch in t:
+        for epoch in np.arange(self.param.epochs):
             loss = self.model.loss(self.A_train, self.y_train)
             if np.isinf(loss) or np.isnan(loss):
                 print("training exit - diverging")
@@ -143,9 +140,8 @@ class DecGD:
 
             train_acc = compute_accuracy(model=self.model, feature=self.A_train, target=self.y_train)
             test_acc = compute_accuracy(model=self.model, feature=self.A_test, target=self.y_test)
-            t.set_description("epoch : {}; Train loss: {}; Train accuracy : {}, Test Accuracy : {} ".
-                              format(epoch, train_losses[epoch + 1], train_acc, test_acc))
-            # print("epoch : {}; loss: {}; Train accuracy : {}".format(epoch, train_losses[epoch + 1], train_acc))
+            print("epoch : {}; loss: {}; Train Acc: {}; Test Acc: {}".
+                  format(epoch, train_losses[epoch + 1], train_acc, test_acc))
             # print("epoch : {}; loss: {}; Test accuracy : {}".format(epoch, test_losses[epoch + 1], test_acc))
             if np.isinf(train_losses[epoch + 1]) or np.isnan(train_losses[epoch + 1]):
                 print("Break training - Diverged")
