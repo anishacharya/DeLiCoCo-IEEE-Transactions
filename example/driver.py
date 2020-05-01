@@ -17,7 +17,7 @@ curr_dir = os.path.dirname(__file__)
 
 def _parse_args():
     parser = argparse.ArgumentParser(description='driver.py')
-    parser.add_argument('--d', type=str, default='mnist',
+    parser.add_argument('--d', type=str, default='breast_cancer',
                         help='Pass data-set')
     parser.add_argument('--r', type=str, default=os.path.join(curr_dir, './data/'),
                         help='Pass data root')
@@ -35,7 +35,7 @@ def _parse_args():
     parser.add_argument('--fraction_coordinates', type=float, default=0.1)
     parser.add_argument('--dropout_p', type=float, default=0.1)
 
-    parser.add_argument('--epochs', type=int, default=1500)
+    parser.add_argument('--epochs', type=int, default=1000)
     parser.add_argument('--lr_type', type=str, default='constant')
     parser.add_argument('--initial_lr', type=float, default=0.001)
     parser.add_argument('--epoch_decay_lr', type=float, default=0.9)
