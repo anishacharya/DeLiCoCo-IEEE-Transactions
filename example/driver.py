@@ -62,7 +62,7 @@ if __name__ == '__main__':
     if not os.path.exists(directory):
         os.makedirs(directory)
     result_file = arg.algorithm + "." + str(arg.n_cores) + '.' + \
-        arg.topology + '.' + str(arg.Q) + '.' + str(arg.consesnsus_lr) +\
+        arg.topology + '.' + str(arg.Q) + '.' + str(arg.consensus_lr) +\
         '.' + arg.quantization_function
 
     model = LogisticRegression(params=arg)
