@@ -21,7 +21,7 @@ if __name__ == '__main__':
     # Follow this template to generate your own combination of plots
     # remember the naming convention of the results
     # Load all results of a particular data-set
-    data = unpickle_dir(d='./results/syn')
+    data = unpickle_dir(d='./results/mnist')
     baselines = unpickle_dir(d='./results/baselines')
     print('Loaded Data')
 
@@ -31,10 +31,11 @@ if __name__ == '__main__':
 
     # Specify what result runs you want to plot together
 
-    plot_results(repeats=data['ours.16.ring.1.full'], label='full')
-    plot_results(repeats=data['ours.16.ring.2.top'], label='top (fraction = 0.02)')
-    plot_results(repeats=data['ours.16.ring.2.rand'], label='rand (fraction = 0.02)')
-    plot_results(repeats=data['ours.16.ring.2.qsgd'], label='qsgd (bits = 2)')
+    plot_results(repeats=data['ours.9.ring.0.0.1.top'], label='Q=0')
+    plot_results(repeats=data['ours.9.ring.1.0.1.top'], label='Q=1')
+    plot_results(repeats=data['ours.9.ring.2.0.1.top'], label='Q=2')
+    plot_results(repeats=data['ours.9.ring.3.0.1.top'], label='Q=3')
+    plot_results(repeats=data['ours.9.ring.4.0.1.top'], label='Q=4')
 
     plt.legend()
     plt.show()
