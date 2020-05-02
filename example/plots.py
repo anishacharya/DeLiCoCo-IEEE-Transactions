@@ -31,11 +31,29 @@ if __name__ == '__main__':
 
     # Specify what result runs you want to plot together
 
-    plot_results(repeats=data['ours.9.ring.0.0.1.top'], label='Q=0')
-    plot_results(repeats=data['ours.9.ring.1.0.1.top'], label='Q=1')
-    plot_results(repeats=data['ours.9.ring.2.0.1.top'], label='Q=2')
-    plot_results(repeats=data['ours.9.ring.3.0.1.top'], label='Q=3')
-    plot_results(repeats=data['ours.9.ring.4.0.1.top'], label='Q=4')
+    """ 
+    Understand Effects of Varying Q
+    """
+    # Varying Q under different consensus LR, while keeping topology and Compression same ##
+
+    # Consensus LR = 0.1
+    plt.title('Effect of Varying Q when Consensus LR = 0.1')
+    # plot_results(repeats=data['ours.9.ring.0.0.1.top'], label='Q=0')
+    # plot_results(repeats=data['ours.9.ring.1.0.1.top'], label='Q=1')
+    # plot_results(repeats=data['ours.9.ring.2.0.1.top'], label='Q=2')
+    # plot_results(repeats=data['ours.9.ring.3.0.1.top'], label='Q=3')
+    # plot_results(repeats=data['ours.9.ring.4.0.1.top'], label='Q=4')
+
+    # Consensus LR = 0.3
+    # plt.title('Effect of Varying Q when Consensus LR = 0.3')
+    # plot_results(repeats=data['ours.9.ring.0.0.3.top'], label='Q=0')
+    # plot_results(repeats=data['ours.9.ring.1.0.3.top'], label='Q=1')
+    # plot_results(repeats=data['ours.9.ring.2.0.3.top'], label='Q=2')
+    # plot_results(repeats=data['ours.9.ring.3.0.3.top'], label='Q=3')
+    # plot_results(repeats=data['ours.9.ring.4.0.1.top'], label='Q=4')
+
+    plt.xlabel('epochs')
+    plt.ylabel('loss (log)')
 
     plt.legend()
     plt.show()
