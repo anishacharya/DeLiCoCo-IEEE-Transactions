@@ -3,6 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from typing import List
 import itertools
+import pickle
+
 
 def plot_results(repeats, label, plot='train'):
     scores = []
@@ -31,9 +33,9 @@ def plot_loop(data_set: str, algorithm: List[str], n_cores: List[int],
     all_hyper_param = list(itertools.product(algorithm, n_cores, topology,
                                              Q, consensus_lr, quantization_func))
     data = unpickle_dir(d='./results/' + data_set)
-    baselines = unpickle_dir(d='./results/baselines')
+    baselines = {'mnist': 0.35247397975085026}
     print('Loaded Data')
-    i=0
+    i = 0
     for hyper_param in all_hyper_param:
         result_file = hyper_param[0] + '.' + str(hyper_param[1]) + '.' + hyper_param[2] + \
                       '.' + str(hyper_param[3]) + '.' + str(hyper_param[4]) + '.' + hyper_param[5]
