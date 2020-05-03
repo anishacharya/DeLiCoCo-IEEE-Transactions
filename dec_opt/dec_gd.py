@@ -141,8 +141,9 @@ class DecGD:
 
             train_acc = compute_accuracy(model=self.model, feature=self.A_train, target=self.y_train)
             test_acc = compute_accuracy(model=self.model, feature=self.A_test, target=self.y_test)
-            print("epoch : {}; loss: {}; Train Acc: {}; Test Acc: {}".
-                  format(epoch, train_losses[epoch + 1], train_acc, test_acc))
+            if epoch % 10 == 0:
+                print("epoch : {}; loss: {}; Train Acc: {}; Test Acc: {}".
+                      format(epoch, train_losses[epoch + 1], train_acc, test_acc))
             # print("epoch : {}; loss: {}; Test accuracy : {}".format(epoch, test_losses[epoch + 1], test_acc))
             if np.isinf(train_losses[epoch + 1]) or np.isnan(train_losses[epoch + 1]):
                 print("Break training - Diverged")

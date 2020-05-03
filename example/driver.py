@@ -58,6 +58,7 @@ def _parse_args():
 
 if __name__ == '__main__':
     arg = _parse_args()
+    print(arg)
     directory = "results/" + arg.d + "/"
     if not os.path.exists(directory):
         os.makedirs(directory)
