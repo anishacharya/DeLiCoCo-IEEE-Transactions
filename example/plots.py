@@ -48,6 +48,10 @@ if __name__ == '__main__':
     # Specify what result runs you want to plot together
     # this is what you need to modify
     labels = []
+
+    """ 
+    Understand Effects of Varying Q
+    """
     Q_var = [0, 1, 2, 3]
     for q in Q_var:
         labels.append('Q=' + str(q) + 'CLR=0.3')
@@ -61,72 +65,5 @@ if __name__ == '__main__':
     plt.grid(axis='both')
     plt.legend()
     plt.show()
-    """ 
-    Understand Effects of Varying Q
-    """
-    # Varying Q under different consensus LR, while keeping topology and Compression same ##
-    # Consensus LR = 0.01
-    # plt.title('Effect of Varying Q when Consensus LR = 0.01')
-    # plot_results(repeats=data['ours.9.ring.0.0.01.top'], label='Q=0, CLR=0.01')
-    # plot_results(repeats=data['ours.9.ring.1.0.01.top'], label='Q=1, CLR=0.01')
-    # plot_results(repeats=data['ours.9.ring.2.0.01.top'], label='Q=2, CLR=0.01')
-    # plot_results(repeats=data['ours.9.ring.3.0.01.top'], label='Q=3, CLR=0.01')
-    # plot_results(repeats=data['ours.9.ring.4.0.01.top'], label='Q=4, CLR=0.01')
-
-    # Consensus LR = 0.01
-    # plt.title('Effect of Varying Q when Consensus LR = 0.03')
-    # plot_results(repeats=data['ours.9.ring.0.0.03.top'], label='Q=0, CLR=0.03')
-    # plot_results(repeats=data['ours.9.ring.1.0.03.top'], label='Q=1, CLR=0.03')
-    # plot_results(repeats=data['ours.9.ring.2.0.03.top'], label='Q=2, CLR=0.03')
-    # plot_results(repeats=data['ours.9.ring.3.0.03.top'], label='Q=3, CLR=0.03')
-    # plot_results(repeats=data['ours.9.ring.4.0.03.top'], label='Q=4, CLR=0.03')
-
-    # Consensus LR = 0.05
-    # plt.title('Effect of Varying Q when Consensus LR = 0.05')
-    # plot_results(repeats=data['ours.9.ring.0.0.05.top'], label='Q=0, CLR=0.05')
-    # plot_results(repeats=data['ours.9.ring.1.0.05.top'], label='Q=1, CLR=0.05')
-    # plot_results(repeats=data['ours.9.ring.2.0.05.top'], label='Q=2, CLR=0.05')
-    # plot_results(repeats=data['ours.9.ring.3.0.05.top'], label='Q=3, CLR=0.05')
-    # plot_results(repeats=data['ours.9.ring.4.0.05.top'], label='Q=4, CLR=0.05')
-
-    # Consensus LR = 0.1
-    # plt.title('Effect of Varying Q when Consensus LR = 0.1')
-    # plot_results(repeats=data['ours.9.ring.0.0.1.top'], label='Q=0, CLR=0.1')
-    # plot_results(repeats=data['ours.9.ring.1.0.1.top'], label='Q=1, CLR=0.1')
-    # plot_results(repeats=data['ours.9.ring.2.0.1.top'], label='Q=2, CLR=0.1')
-    # plot_results(repeats=data['ours.9.ring.3.0.1.top'], label='Q=3, CLR=0.1')
-    # plot_results(repeats=data['ours.9.ring.4.0.1.top'], label='Q=4, CLR=0.1')
-    #
-    # # Consensus LR = 0.3
-    # plt.title('Effect of Varying Q and Consensus')
-    # plot_results(repeats=data['ours.9.ring.0.0.3.top'], label='Q=0, CLR=0.3')
-    # plot_results(repeats=data['ours.9.ring.1.0.3.top'], label='Q=1, CLR=0.3')
-    # plot_results(repeats=data['ours.9.ring.2.0.3.top'], label='Q=2, CLR=0.3')
-    # plot_results(repeats=data['ours.9.ring.3.0.3.top'], label='Q=3, CLR=0.3')
-    # plot_results(repeats=data['ours.9.ring.4.0.3.top'], label='Q=4, CLR=0.3')
-
-    # Consensus LR = 0.5
-    # plt.title('Effect of Varying Q with Consensus LR = 0.5')
-    # plot_results(repeats=data['ours.9.ring.0.0.5.top'], label='Q=0, CLR=0.5')
-    # plot_results(repeats=data['ours.9.ring.1.0.5.top'], label='Q=1, CLR=0.5')
-    # plot_results(repeats=data['ours.9.ring.2.0.5.top'], label='Q=2, CLR=0.5')
-    # plot_results(repeats=data['ours.9.ring.3.0.5.top'], label='Q=3, CLR=0.5')
-    # plot_results(repeats=data['ours.9.ring.4.0.5.top'], label='Q=4, CLR=0.5')
-
-    # Consensus LR = 0.7
-    # plt.title('Effect of Varying Q with Consensus LR = 0.5')
-    # plot_results(repeats=data['ours.9.ring.0.0.7.top'], label='Q=0, CLR=0.7')
-    # plot_results(repeats=data['ours.9.ring.1.0.7.top'], label='Q=1, CLR=0.7')
-    # plot_results(repeats=data['ours.9.ring.2.0.7.top'], label='Q=2, CLR=0.7')
-    # plot_results(repeats=data['ours.9.ring.3.0.7.top'], label='Q=3, CLR=0.7')
-    # plot_results(repeats=data['ours.9.ring.4.0.7.top'], label='Q=4, CLR=0.7')
-
-    # Consensus LR = 1
-    # plt.title('Effect of Varying Q with Consensus LR = 1')
-    # plot_results(repeats=data['ours.9.ring.0.1.top'], label='Q=0, CLR=1')
-    # plot_results(repeats=data['ours.9.ring.1.1.top'], label='Q=1, CLR=1')
-    # plot_results(repeats=data['ours.9.ring.2.1.top'], label='Q=2, CLR=1')
-    # plot_results(repeats=data['ours.9.ring.3.1.top'], label='Q=3, CLR=1')
-    # plot_results(repeats=data['ours.9.ring.4.1.top'], label='Q=4, CLR=1')
 
 

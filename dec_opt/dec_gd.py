@@ -132,6 +132,7 @@ class DecGD:
                         self.param.consensus_lr * self.model.x_hat.dot(self.W - np.eye(self.param.n_cores))
                 pass
             else:
+                print('Running Plain GD. n_cores = 1 else convergence results not guaranteed')
                 # do nothing just plain GD
                 self.model.x_estimate = x_cap
 

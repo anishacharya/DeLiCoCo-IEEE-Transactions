@@ -19,6 +19,8 @@ class DataReader:
         self.download = download
         if data_set == 'mnist':
             self.A_train, self.y_train, self.A_test, self.y_test = self._get_mnist()
+        elif data_set == 'mnist_partial':
+            self.A_train, self.y_train, self.A_test, self.y_test = self._get_mnist_partial()
         elif data_set == 'cifar10':
             self.A_train, self.y_train, self.A_test, self.y_test = self._get_cifar10()
         elif data_set == 'breast_cancer':
@@ -79,7 +81,51 @@ class DataReader:
         x_test_aug[:, 0:x_test.shape[1]] = x_test
 
         return x_train_aug, y_train, x_test_aug, y_test
-    
+
+    def _get_mnist_partial(self, do_sorting=True):
+        mnist_train = datasets.MNIST(root=self.root, download=self.download, train=True)
+        mnist_test = datasets.MNIST(root=self.root, download=self.download, train=False)
+
+        x_train = mnist_train.train_data.numpy() / 255.0
+        x_test = mnist_test.test_data.numpy() / 255.0
+        y_train = mnist_train.train_labels.numpy()
+        y_test = mnist_test.test_labels.numpy()
+
+        # flatten the images
+        x_train = x_train.reshape(x_train.shape[0], x_train.shape[1] * x_train.shape[2])
+        x_test = x_test.reshape(x_test.shape[0], x_test.shape[1] * x_test.shape[2])
+
+        # Keep only labels 4 and 9
+        idx_train = np.argwhere(y_train % 5 == 4)
+        idx_test = np.argwhere(y_test % 5 == 4)
+        x_train = x_train[idx_train[:, 0], :]
+        x_test = x_test[idx_test[:, 0], :]
+
+        y_train = y_train[idx_train[:, 0]]
+        y_train[y_train == 4] = 0
+        y_train[y_train == 9] = 1
+
+        y_test = y_test[idx_test[:, 0]]
+        y_test[y_test == 4] = 0
+        y_test[y_test == 9] = 1
+
+        if do_sorting:
+            y_sorted_ix = np.argsort(y_train)
+            x_train = x_train[y_sorted_ix]
+            y_train = y_train[y_sorted_ix]
+
+        y_train = y_train.reshape(y_train.shape[0], 1)
+        y_test = y_test.reshape(y_test.shape[0], 1)
+
+        # Now add the Bias term - Add a Fake dim of all 1s to the parameters
+        x_train_aug = np.ones((x_train.shape[0], x_train.shape[1] + 1))
+        x_train_aug[:, 0:x_train.shape[1]] = x_train
+
+        x_test_aug = np.ones((x_test.shape[0], x_test.shape[1] + 1))
+        x_test_aug[:, 0:x_test.shape[1]] = x_test
+
+        return x_train_aug, y_train, x_test_aug, y_test
+
     def _get_cifar10(self, do_sorting=True):
         cifar10_train = datasets.CIFAR10(root='./data', download=self.download, train=True)
         cifar10_test = datasets.CIFAR10(root='./data', download=self.download, train=False)
