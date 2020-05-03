@@ -1,7 +1,8 @@
 from dec_opt.utils import unpickle_dir
 import numpy as np
 import matplotlib.pyplot as plt
-
+from typing import List
+import itertools
 
 def plot_results(repeats, label, plot='train'):
     scores = []
@@ -23,21 +24,43 @@ def plot_results(repeats, label, plot='train'):
     plt.fill_between(x, LB, UB, alpha=0.2)
 
 
-if __name__ == '__main__':
-    # Example plot generation :
-    # Follow this template to generate your own combination of plots
-    # remember the naming convention of the results
-    # Load all results of a particular data-set
-    data = unpickle_dir(d='./results/mnist')
+def plot_loop(data_set: str, algorithm: List[str], n_cores: List[int],
+              topology: List[str], Q: List[int], consensus_lr: List[float],
+              quantization_func: List[str],
+              label: List[str]):
+    all_hyper_param = list(itertools.product(algorithm, n_cores, topology,
+                                             Q, consensus_lr, quantization_func))
+    data = unpickle_dir(d='./results/' + data_set)
     baselines = unpickle_dir(d='./results/baselines')
     print('Loaded Data')
+    i=0
+    for hyper_param in all_hyper_param:
+        result_file = hyper_param[0] + '.' + str(hyper_param[1]) + '.' + hyper_param[2] + \
+                      '.' + str(hyper_param[3]) + '.' + str(hyper_param[4]) + '.' + hyper_param[5]
+        plot_results(repeats=data[result_file], label=label[i])
+        i += 1
 
-    # Now Lets
+
+if __name__ == '__main__':
     plt.figure()
     fig = plt.gcf()
 
     # Specify what result runs you want to plot together
+    # this is what you need to modify
+    labels = []
+    Q_var = [0, 1, 2, 3]
+    for q in Q_var:
+        labels.append('Q=' + str(q) + 'CLR=0.3')
 
+    # Now run to get plots
+    plot_loop(data_set='mnist', n_cores=[9], algorithm=['ours'], topology=['ring'],
+              Q=Q_var, consensus_lr=[0.3], label=labels, quantization_func=['top'])
+
+    plt.xlabel('epochs')
+    plt.ylabel('loss (log)')
+    plt.grid(axis='both')
+    plt.legend()
+    plt.show()
     """ 
     Understand Effects of Varying Q
     """
@@ -49,6 +72,14 @@ if __name__ == '__main__':
     # plot_results(repeats=data['ours.9.ring.2.0.01.top'], label='Q=2, CLR=0.01')
     # plot_results(repeats=data['ours.9.ring.3.0.01.top'], label='Q=3, CLR=0.01')
     # plot_results(repeats=data['ours.9.ring.4.0.01.top'], label='Q=4, CLR=0.01')
+
+    # Consensus LR = 0.01
+    # plt.title('Effect of Varying Q when Consensus LR = 0.03')
+    # plot_results(repeats=data['ours.9.ring.0.0.03.top'], label='Q=0, CLR=0.03')
+    # plot_results(repeats=data['ours.9.ring.1.0.03.top'], label='Q=1, CLR=0.03')
+    # plot_results(repeats=data['ours.9.ring.2.0.03.top'], label='Q=2, CLR=0.03')
+    # plot_results(repeats=data['ours.9.ring.3.0.03.top'], label='Q=3, CLR=0.03')
+    # plot_results(repeats=data['ours.9.ring.4.0.03.top'], label='Q=4, CLR=0.03')
 
     # Consensus LR = 0.05
     # plt.title('Effect of Varying Q when Consensus LR = 0.05')
@@ -98,8 +129,4 @@ if __name__ == '__main__':
     # plot_results(repeats=data['ours.9.ring.3.1.top'], label='Q=3, CLR=1')
     # plot_results(repeats=data['ours.9.ring.4.1.top'], label='Q=4, CLR=1')
 
-    plt.xlabel('epochs')
-    plt.ylabel('loss (log)')
-    plt.grid(axis='both')
-    plt.legend()
-    plt.show()
+
