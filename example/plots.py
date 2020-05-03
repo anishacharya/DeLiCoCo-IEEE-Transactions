@@ -3,7 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from typing import List
 import itertools
-import pickle
 
 
 def plot_results(repeats, label, plot='train', optimal=0.0):
@@ -34,7 +33,8 @@ def plot_loop(data_set: str, algorithm: List[str], n_cores: List[int],
               label: List[str]):
 
     # Get Optimal Values
-    baselines = {'mnist': 0.35247397975085026}
+    baselines = {'mnist': 0.35247397975085026,
+                 'mnist_partial': 0.0843443218396105}
     optimal = baselines[data_set]
 
     # Load Hyper Parameters
