@@ -64,7 +64,7 @@ if __name__ == '__main__':
     """
     Q_var = [0, 1, 2, 3]
     for q in Q_var:
-        labels.append('Q=' + str(q) + 'CLR=0.3')
+        labels.append('Q=' + str(q) + ', CLR=0.3')
 
     # Now run to get plots
     plot_loop(data_set='mnist', n_cores=[9], algorithm=['ours'], topology=['ring'],
