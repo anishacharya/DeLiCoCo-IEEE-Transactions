@@ -1,2 +1,11 @@
-python3 driver.py --d 'mnist_partial' --algorithm 'baseline' --n_cores 1 --topology 'ring' --Q 2 --consensus_lr 0.1 \
---quantization_function 'top' --fraction_coordinates 0.1 --epochs 7000 --initial_lr 0.09 --n_repeat 1
+python3 driver.py \
+--d 'mnist_partial' \
+--algorithm 'ours' \
+--n_cores 9 \
+--topology 'ring' --Q 0 \
+--consensus_lr 0.01 \
+--quantization_function 'top'\
+--fraction_coordinates 0.3 \
+--epochs 7000 \
+--initial_lr 0.1 \
+--n_repeat 3
