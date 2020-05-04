@@ -62,26 +62,28 @@ if __name__ == '__main__':
     """ 
     Understand Effects of Varying Q
     """
-    Q_var = [0, 1, 2, 3, 4, 5, 6]
-    for q in Q_var:
-        labels.append('Q=' + str(q) + ', CLR=0.3')
+    clr_var = [0.01, 0.1, 0.3, 1.0]
+    for clr in clr_var:
+        labels.append('consensus=' + str(clr))
 
     # Now run to get plots
     plot_loop(data_set='mnist_partial', n_cores=[9], algorithm=['ours'], topology=['ring'],
-              Q=Q_var, consensus_lr=[0.01], label=labels, quantization_func=['top'])
+              Q=[15], consensus_lr=clr_var, label=labels, quantization_func=['top'])
 
     # plot baseline
     # data = unpickle_dir(d='./results/mnist_partial')
-    # plot_results(repeats=data['baseline.1.ring.2.0.1.top'],
+    # repeats = data['baseline.1.ring.2.0.1.top']
+    # repeats[0][0] = repeats[0][:500]
+    # plot_results(repeats= repeats,
     #              label='Plain GD', optimal=0.0843443218396105)
 
-    plt.xlabel('Gradient Steps')
-    plt.ylabel('Training Sub-Optimality')
+    plt.xlabel('# of gradient steps')
+    plt.ylabel('training suboptimality')
     plt.grid(axis='both')
 
     plt.yscale("log")
-    plt.ylim(bottom=1e-2, top=1)
-    plt.xlim(left=0, right=7000)
+    plt.ylim(8e-3, 1)
+    #plt.xlim(left=0, right=10000)
     plt.legend()
     plt.show()
 
