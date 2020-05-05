@@ -9,7 +9,7 @@ baselines = {'mnist': 0.35247397975085026,
              'mnist_partial': 0.07954815167630427}  # 4000: 0.08184391665417677 5000: 0.07954815167630427}
 
 
-def plot_results(repeats, label, plot='train', optima=0.0):
+def plot_results(repeats, label, plot='train', optima=0.0, line_style=None):
     scores = []
     for result in repeats:
         loss_val = result[0] if plot == 'train' else result[1]
@@ -29,7 +29,7 @@ def plot_results(repeats, label, plot='train', optima=0.0):
     UB = mean + np.std(scores, axis=0)
     LB = mean - np.std(scores, axis=0)
 
-    plt.plot(x, mean, label=label, linewidth=2)
+    plt.plot(x, mean, label=label, linewidth=5, linestyle=line_style)
     plt.fill_between(x, LB, UB, alpha=0.2, linewidth=1)
 
 
@@ -60,8 +60,6 @@ if __name__ == '__main__':
     # plot baseline
     baselines = unpickle_dir(d='./results/baselines')
     repeats_baseline = baselines[data_set + '_gd']
-    print(repeats_baseline[0][0][3999])
-
 
     plt.xlabel('Number of gradient steps')
     plt.ylabel('training suboptimality')
@@ -78,18 +76,21 @@ if __name__ == '__main__':
         labels.append('consensus=' + str(clr))
 
     labels = []
-    q_var = [5, 10, 15]
+    q_var = [0, 1, 5, 10]
     for q in q_var:
         labels.append('Q=' + str(q))
     # Now run to get plots
     plot_loop(dataset=data_set, n_cores=[9], algorithm=['ours'], topology=['ring'],
-              Q=q_var, consensus_lr=[0.5], label=labels, quantization_func=['top'], optima=optimal_baseline)
+              Q=q_var, consensus_lr=[0.9], label=labels, quantization_func=['top'],
+              optima=optimal_baseline)
 
-    plot_results(repeats=repeats_baseline, label='Full GD Baseline', optima=optimal_baseline)
-    plt.yscale("log")
-    plt.ylim(bottom=5e-4, top=2)
-    plt.xlim(left=0, right=5000)
+    plot_results(repeats=repeats_baseline, label='GD',
+                 optima=optimal_baseline, line_style='dashed')
     plt.legend()
+    plt.yscale("log")
+    plt.ylim(bottom=1e-3, top=2)
+    plt.xlim(left=0, right=5000)
+    plt.title('Consensus learning rate = 0.9')
     plt.show()
 
 
