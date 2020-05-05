@@ -33,15 +33,14 @@ def plot_results(repeats, label, plot='train', optima=0.0, line_style=None):
     plt.fill_between(x, LB, UB, alpha=0.2, linewidth=1)
 
 
-def plot_loop(dataset: str, algorithm: List[str], n_cores: List[int],
+def plot_loop(data, algorithm: List[str], n_cores: List[int],
               topology: List[str], Q: List[int], consensus_lr: List[float],
               quantization_func: List[str],
               label: List[str], optima: float):
     # Load Hyper Parameters
     all_hyper_param = list(itertools.product(algorithm, n_cores, topology,
                                              Q, consensus_lr, quantization_func))
-    # Load Data
-    data = unpickle_dir(d='./results/' + dataset + '/paper')
+
     # Generate Plots
     i = 0
     for hyper_param in all_hyper_param:
@@ -61,6 +60,9 @@ if __name__ == '__main__':
     baselines = unpickle_dir(d='./results/baselines')
     repeats_baseline = baselines[data_set + '_gd']
 
+    # plot no communication
+    repeats_disconnected = baselines[data_set + '_dis']
+
     plt.xlabel('Number of gradient steps')
     plt.ylabel('training suboptimality')
     plt.grid(axis='both')
@@ -76,15 +78,21 @@ if __name__ == '__main__':
         labels.append('consensus=' + str(clr))
 
     labels = []
-    q_var = [0, 1, 5, 10]
+    q_var = [1, 5, 10]
     for q in q_var:
         labels.append('Q=' + str(q))
+
     # Now run to get plots
-    plot_loop(dataset=data_set, n_cores=[9], algorithm=['ours'], topology=['ring'],
+    plot_results(repeats=repeats_disconnected, label='Disconnected',
+                 optima=optimal_baseline)
+
+    results_dir = '/paper/Q_clr/'  # For Q vs consensus plots
+    data = unpickle_dir(d='./results/' + data_set + results_dir)
+    plot_loop(data=data, n_cores=[9], algorithm=['ours'], topology=['ring'],
               Q=q_var, consensus_lr=[0.9], label=labels, quantization_func=['top'],
               optima=optimal_baseline)
 
-    plot_results(repeats=repeats_baseline, label='GD',
+    plot_results(repeats=repeats_baseline, label='Centralized',
                  optima=optimal_baseline, line_style='dashed')
     plt.legend()
     plt.yscale("log")
