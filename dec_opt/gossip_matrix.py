@@ -25,7 +25,7 @@ class GossipMatrix:
             W[0, nodes - 1] = value
             W[nodes - 1, 0] = value
             return W
-        elif topology == 'centralized':
+        elif topology == 'fully_connected':
             W = np.ones((nodes, nodes), dtype=np.float64) / nodes
             return W
         elif topology == 'disconnected':

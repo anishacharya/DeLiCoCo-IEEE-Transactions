@@ -36,16 +36,19 @@ def plot_results(repeats, label, plot='train', optima=0.0, line_style=None):
 def plot_loop(data, algorithm: List[str], n_cores: List[int],
               topology: List[str], Q: List[int], consensus_lr: List[float],
               quantization_func: List[str],
-              label: List[str], optima: float):
+              label: List[str], optima: float,
+              fraction_coordinates: List[float], dropout_p: List[float], num_bits: List[int]):
     # Load Hyper Parameters
     all_hyper_param = list(itertools.product(algorithm, n_cores, topology,
-                                             Q, consensus_lr, quantization_func))
+                                             Q, consensus_lr, quantization_func,
+                                             fraction_coordinates, dropout_p, num_bits))
 
     # Generate Plots
     i = 0
     for hyper_param in all_hyper_param:
-        result_file = hyper_param[0] + '.' + str(hyper_param[1]) + '.' + hyper_param[2] + \
-                      '.' + str(hyper_param[3]) + '.' + str(hyper_param[4]) + '.' + hyper_param[5]
+        result_file = 'a_' + hyper_param[0] + '.n_' + str(hyper_param[1]) + '.t_' + hyper_param[2] + \
+                      '.q_' + str(hyper_param[3]) + '.lr_' + str(hyper_param[4]) + '.c_' + hyper_param[5] + \
+                      '.f_' + str(hyper_param[6]) + '.p_' + str(hyper_param[7]) + '.b_' + str(hyper_param[8])
         plot_results(repeats=data[result_file], label=label[i], optima=optima)
         i += 1
 
@@ -54,6 +57,7 @@ if __name__ == '__main__':
     plt.figure()
     fig = plt.gcf()
     data_set = 'mnist_partial'
+    labels = []
     optimal_baseline = baselines[data_set]
 
     # plot baseline
@@ -72,24 +76,19 @@ if __name__ == '__main__':
     """
     # Specify what result runs you want to plot together
     # this is what you need to modify
-    labels = []
-    clr_var = [0.01, 0.1, 0.3, 1.0]
-    for clr in clr_var:
-        labels.append('consensus=' + str(clr))
-
-    labels = []
-    q_var = [1, 5, 10]
-    for q in q_var:
-        labels.append('Q=' + str(q))
 
     # Now run to get plots
     plot_results(repeats=repeats_disconnected, label='Disconnected',
                  optima=optimal_baseline)
 
-    results_dir = '/paper/Q_clr/'  # For Q vs consensus plots
+    # results_dir = '/paper/Q_clr/'  # For Q vs consensus plots
+    results_dir = '/paper/Q_t/'
     data = unpickle_dir(d='./results/' + data_set + results_dir)
-    plot_loop(data=data, n_cores=[9], algorithm=['ours'], topology=['ring'],
-              Q=q_var, consensus_lr=[0.9], label=labels, quantization_func=['top'],
+    t_var = ['ring', 'torus']
+    labels = t_var
+    plot_loop(data=data, n_cores=[9], algorithm=['ours'], topology=t_var,
+              Q=[1], consensus_lr=[0.5], label=labels, quantization_func=['top'],
+              fraction_coordinates=[0.5], dropout_p=[0.1], num_bits=[2],
               optima=optimal_baseline)
 
     plot_results(repeats=repeats_baseline, label='Centralized',
@@ -100,5 +99,3 @@ if __name__ == '__main__':
     plt.xlim(left=0, right=5000)
     plt.title('Consensus learning rate = 0.9')
     plt.show()
-
-

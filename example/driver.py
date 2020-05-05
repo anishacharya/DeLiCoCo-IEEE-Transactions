@@ -21,13 +21,15 @@ def _parse_args():
                         help='Pass data-set')
     parser.add_argument('--r', type=str, default=os.path.join(curr_dir, './data/'),
                         help='Pass data root')
+    parser.add_argument('--o', type=str, default=None, help='Pass op location')
+
     parser.add_argument('--stochastic', type=bool, default=False)
     parser.add_argument('--algorithm', type=str, default='ours')
-
     parser.add_argument('--n_cores', type=int, default=9)
-
     parser.add_argument('--topology', type=str, default='ring')
+
     parser.add_argument('--Q', type=int, default=2)
+
     parser.add_argument('--consensus_lr', type=float, default=0.3)
 
     parser.add_argument('--quantization_function', type=str, default='full')
@@ -59,12 +61,16 @@ def _parse_args():
 if __name__ == '__main__':
     arg = _parse_args()
     print(arg)
-    directory = "results/" + arg.d + "/"
+    if not arg.o:
+        directory = "results/" + arg.d + "/"
+    else:
+        directory = "results/" + arg.o + '/'
     if not os.path.exists(directory):
         os.makedirs(directory)
-    result_file = arg.algorithm + "." + str(arg.n_cores) + '.' + \
-        arg.topology + '.' + str(arg.Q) + '.' + str(arg.consensus_lr) +\
-        '.' + arg.quantization_function
+    result_file = 'a_' + arg.algorithm + '.n_' + str(arg.n_cores) + '.t_' + \
+        arg.topology + '.q_' + str(arg.Q) + '.lr_' + str(arg.consensus_lr) +\
+        '.c_' + str(arg.quantization_function) + '.f_' + str(arg.fraction_coordinates) +\
+        '.p_' + str(arg.dropout_p) + '.b_' + str(arg.num_bits)
 
     model = LogisticRegression(params=arg)
     args = []
