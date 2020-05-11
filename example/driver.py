@@ -3,8 +3,6 @@ import os
 from dec_opt.utils import pickle_it
 from dec_opt.experiment import run_exp
 import numpy as np
-import multiprocessing as mp
-from functools import partial
 from dec_opt.logistic_regression import LogisticRegression
 
 """
@@ -51,13 +49,6 @@ def _parse_args():
     return args
 
 
-# TODO:
-#  For Each Data-set in [MNIST, CIFAR10]
-#  Vary Compression : *Pruning  *Quantization: Vary n_cores
-#  Vary Topology : Vary n_cores
-#  Vary Q values : Vary n_cores
-
-
 if __name__ == '__main__':
     arg = _parse_args()
     print(arg)
@@ -78,9 +69,6 @@ if __name__ == '__main__':
     for random_seed in np.arange(1, arg.n_repeat + 1):
         arg.seed = random_seed
         results.append(run_exp(model=model, args=arg))
-        # args += [arg]
-    # with mp.Pool(arg.n_proc) as pool:
-    #     results = pool.map(partial(run_exp, model=model), args)
 
     # Dumps the results in appropriate files
     pickle_it(arg, 'parameters.' + result_file, directory)

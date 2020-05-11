@@ -21,7 +21,6 @@ class Compression:
             return x
         elif self.quantization_function == 'top':
             q = np.zeros_like(x)
-
             k = round(self.fraction_coordinates * q.shape[0])
             for i in range(0, q.shape[1]):
                 indexes = np.argsort(np.abs(x[:, i]))[::-1]
