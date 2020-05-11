@@ -6,7 +6,7 @@ import itertools
 
 # Get Optimal Values
 baselines = {'mnist': 0.35247397975085026,
-             'mnist_partial': 0.07954815167630427}  # 4000: 0.08184391665417677 5000: 0.07954815167630427}
+             'mnist_partial': 0.07954815167630427}
 
 
 def plot_results(repeats, label, plot='train',
@@ -14,17 +14,10 @@ def plot_results(repeats, label, plot='train',
     scores = []
     for result in repeats:
         loss_val = result[0] if plot == 'train' else result[1]
-        # Get Sub Optimal Loss
-        # Get Optimal Values
-
         loss_val = loss_val - optima
         scores += [loss_val]
 
     scores = np.array(scores)
-    # scores[scores <= 1e-2] = 1e-2
-    # scores[np.isinf(scores)] = 1e20
-    # scores[np.isnan(scores)] = 1e20
-
     mean = np.mean(scores, axis=0)
     x = np.arange(mean.shape[0])
     UB = mean + np.std(scores, axis=0)
@@ -61,11 +54,10 @@ if __name__ == '__main__':
     data_set = 'mnist_partial'
     optimal_baseline = baselines[data_set]
 
-    # plot baseline
+    # baseline - Gradient Descent Vanilla Centralized
     baselines = unpickle_dir(d='./results/baselines')
     repeats_baseline = baselines[data_set + '_gd']
-
-    # plot no communication
+    # no communication
     repeats_disconnected = baselines[data_set + '_dis']
 
     plt.xlabel('Number of gradient steps')
@@ -76,46 +68,81 @@ if __name__ == '__main__':
     # this is what you need to modify
 
     # Now run to get plots
-    # plot_results(repeats=repeats_disconnected, label='Disconnected',
-    #              optima=optimal_baseline)
 
-    # results_dir = '/paper/Q/'  # For Q vs consensus plots
-    # results_dir = '/paper/T/'  # For topology plots
-
-    # plot_loop(data=data, n_cores=[9],
-    #           algorithm=['ours'],
-    #           topology=['torus'],
-    #           Q=[2],
-    #           consensus_lr=[0.05],
-    #           label=['Top 5%', 'Top 50%'],
-    #           quantization_func=['top'],
-    #           fraction_coordinates=[0.05, 0.5],
-    #           dropout_p=[0.5], num_bits=[2],
-    #           optima=optimal_baseline, linestyle=None, line_width=3)
-
-    # Figure -1
+    # =========================
+    #       Figure - 1
+    # =========================
     results_dir = '/paper/Q/'
     data = unpickle_dir(d='./results/' + data_set + results_dir)
+    plot_results(repeats=repeats_disconnected, label='Disconnected',
+                 optima=optimal_baseline, line_width=3)
+    plot_loop(data=data, n_cores=[9],
+              algorithm=['ours'],
+              topology=['torus'],
+              Q=[1, 5, 10],
+              consensus_lr=[0.9],
+              label=['Q=1', 'Q=5', 'Q=10'],
+              quantization_func=['top'],
+              fraction_coordinates=[0.5],
+              dropout_p=[0.5], num_bits=[2],
+              optima=optimal_baseline, linestyle=None, line_width=3)
+    plot_results(repeats=repeats_baseline, label='Centralized',
+                 optima=optimal_baseline, line_style='dashed', line_width=3)
+    plt.title('MNIST, Consensus learning rate = 0.9')
 
-    # Figure -3
+    # =========================
+    #       Figure - 2
+    # =========================
+    # results_dir = '/paper/T/'
+    # data = unpickle_dir(d='./results/' + data_set + results_dir)
+    # plot_loop(data=data, n_cores=[9],
+    #           algorithm=['ours'],
+    #           topology=['ring', 'torus', 'fully_connected'],
+    #           Q=[1],
+    #           consensus_lr=[0.5],
+    #           label=['ring(Q=1)', 'torus(Q=1)', 'fully-connected(Q=1)'],
+    #           quantization_func=['top'],
+    #           fraction_coordinates=[0.5],
+    #           dropout_p=[0.1], num_bits=[2],
+    #           optima=optimal_baseline, linestyle='dashed', line_width=4)
+    #
+    # plot_loop(data=data, n_cores=[9],
+    #           algorithm=['ours'],
+    #           topology=['ring', 'torus', 'fully_connected'],
+    #           Q=[5],
+    #           consensus_lr=[0.5],
+    #           label=['ring(Q=5)', 'torus(Q=5)', 'fully-connected(Q=5)'],
+    #           quantization_func=['top'],
+    #           fraction_coordinates=[0.5],
+    #           dropout_p=[0.1], num_bits=[2],
+    #           optima=optimal_baseline, linestyle=None, line_width=4)
+    #
+    # plot_results(repeats=repeats_baseline, label='Centralized',
+    #              optima=optimal_baseline, line_width=4)
+    # plt.title('MNIST, number of nodes = 9')
+
+    # =========================
+    #       Figure - 3
+    # =========================
     # MNIST
-    results_dir = '/paper/C/'
-    data = unpickle_dir(d='./results/' + data_set + results_dir)
-    plot_results(repeats=data['a_ours.n_9.t_torus.q_15.lr_0.1.c_top.f_0.05.p_0.5.b_2'],
-                 label='top (5%)',
-                 optima=optimal_baseline, line_width=3)
-    plot_results(repeats=data['a_ours.n_9.t_torus.q_15.lr_0.05.c_rand.f_0.05.p_0.5.b_2'],
-                 label='rand (5%)',
-                 optima=optimal_baseline, line_width=3)
-    plot_results(repeats=data['a_ours.n_9.t_torus.q_10.lr_0.05.c_qsgd.f_0.05.p_0.5.b_2'],
-                 label='qsgd (2 bit)',
-                 optima=optimal_baseline, line_width=3)
-    plot_results(repeats=repeats_baseline, label='DGD',
-                 optima=optimal_baseline, line_width=3)
-    # end Figure -3
+    # results_dir = '/paper/C/'
+    # data = unpickle_dir(d='./results/' + data_set + results_dir)
+    # plot_results(repeats=data['a_ours.n_9.t_torus.q_15.lr_0.1.c_top.f_0.05.p_0.5.b_2'],
+    #              label='top (5%)',
+    #              optima=optimal_baseline, line_width=4)
+    # plot_results(repeats=data['a_ours.n_9.t_torus.q_15.lr_0.05.c_rand.f_0.05.p_0.5.b_2'],
+    #              label='rand (5%)',
+    #              optima=optimal_baseline, line_width=4)
+    # plot_results(repeats=data['a_ours.n_9.t_torus.q_10.lr_0.05.c_qsgd.f_0.05.p_0.5.b_2'],
+    #              label='qsgd (2 bit)',
+    #              optima=optimal_baseline, line_width=4)
+    # plot_results(repeats=repeats_baseline, label='DGD',
+    #              optima=optimal_baseline, line_style='dashed', line_width=4)
+    # plt.title('MNIST')
+
     plt.legend()
     plt.yscale("log")
     plt.ylim(bottom=5e-3, top=1)
     plt.xlim(left=0, right=5000)
-    plt.title('MNIST')
+
     plt.show()
