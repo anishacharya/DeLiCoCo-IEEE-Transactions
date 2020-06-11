@@ -50,6 +50,11 @@ Parameter Options:
     parser.add_argument('--n_repeat', type=int, default=3, help='no of times repeat exp with diff seed')
 ```
 
+**Supported argument values**
+```
+    --d : 'breast_cancer' || 'mnist' || 'syn1' || 'syn2'
+    --task : 'log_reg' || 'lin_reg' || 'nlin_reg'
+```
 
 **How do I reproduce the plots in the paper?**
 ```
