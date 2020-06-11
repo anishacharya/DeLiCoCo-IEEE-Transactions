@@ -1,4 +1,4 @@
-# FAQ : De-LiCoCo
+# FAQ : DeLi-CoCo
  
 **How do I run the Code?**
 ```
