@@ -17,10 +17,10 @@ class DataReader:
         elif data_set == 'mnist_partial':
             self.A_train, self.y_train, self.A_test, self.y_test = self._get_mnist_partial()
         elif data_set == 'syn1':
-            gen = True #set this to False if SYN1 is already generated once
+            gen = True  # set this to False if SYN1 is already generated once
             self.A_train, self.y_train, self.A_test, self.y_test = self._get_syn1(gen)
         elif data_set == 'syn2':
-            gen = True #set this to False if SYN2 is already generated once
+            gen = True  # set this to False if SYN2 is already generated once
             self.A_train, self.y_train, self.A_test, self.y_test = self._get_syn2(gen)
         elif data_set == 'breast_cancer':
             self.A_train, self.y_train, self.A_test, self.y_test = self._get_breast_cancer(test_split=test_split)
@@ -125,30 +125,30 @@ class DataReader:
 
         return x_train_aug, y_train, x_test_aug, y_test
 
-    def _get_syn1(self, generate = False):
+    def _get_syn1(self, generate=False):
         if generate:
             train_exs = 10000
             y_dim = 1000
-            x_train = np.random.normal(0.0,1.0,(2*y_dim,train_exs))
+            x_train = np.random.normal(0.0, 1.0, (2*y_dim, train_exs))
             
-            A = np.random.normal(1.0,1.0,(1,2*y_dim))/np.sqrt(y_dim)
-            noise = np.random.normal(0.0,0.05,(1,train_exs))
+            A = np.random.normal(1.0, 1.0, (1, 2*y_dim))/np.sqrt(y_dim)
+            noise = np.random.normal(0.0, 0.05, (1, train_exs))
             
-            y_train = np.matmul(A,x_train) + noise
+            y_train = np.matmul(A, x_train) + noise
             
             # Training set
-            np.save('x_train_SYN1.npy',x_train)
-            np.save('y_train_SYN1.npy',y_train)        
+            np.save('x_train_SYN1.npy', x_train)
+            np.save('y_train_SYN1.npy', y_train)
             
             test_exs = 5000
-            x_test = np.random.normal(0.0,1.0,(2*y_dim,test_exs))
-            noise = np.random.normal(0.0,0.05,(1,test_exs))
+            x_test = np.random.normal(0.0, 1.0, (2*y_dim, test_exs))
+            noise = np.random.normal(0.0, 0.05, (1, test_exs))
             
-            y_test = np.matmul(A,x_test) + noise
+            y_test = np.matmul(A, x_test) + noise
             
             # Test set
-            np.save('x_test_SYN1.npy',x_test)
-            np.save('y_test_SYN1.npy',y_test)
+            np.save('x_test_SYN1.npy', x_test)
+            np.save('y_test_SYN1.npy', y_test)
             
             print("Generated!")
             
@@ -159,9 +159,8 @@ class DataReader:
             y_test = np.load('y_test_SYN1.npy')
         
         return np.transpose(x_train), np.transpose(y_train), np.transpose(x_test), np.transpose(y_test)
-    
-    
-    def _get_syn2(self, generate = False):
+
+    def _get_syn2(self, generate=False):
         if generate:
             train_exs = 10000
             y_dim = 1000
