@@ -1,6 +1,7 @@
 import numpy as np
 from typing import Dict
 
+
 class LinearRegression:
     def __init__(self, params):
         self.params = params
