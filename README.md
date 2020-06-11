@@ -1,4 +1,4 @@
-# FAQ : DeLiCoCo
+# FAQ : De-LiCoCo
  
 **How do I run the Code?**
 ```
@@ -20,8 +20,9 @@ python3 driver.py --d 'mnist' --n_cores 10 --algorithms 'ours'
 
 Parameter Options:
 
-parser.add_argument('--d', type=str, default='breast_cancer',
+    parser.add_argument('--d', type=str, default='breast_cancer',
                         help='Pass data-set')
+    parser.add_argument('--task', type=str, default='log_reg', help='Choose task')
     parser.add_argument('--r', type=str, default=os.path.join(curr_dir, './data/'),
                         help='Pass data root')
     parser.add_argument('--stochastic', type=bool, default=False)
