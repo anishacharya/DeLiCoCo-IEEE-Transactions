@@ -16,8 +16,12 @@ class DataReader:
             self.A_train, self.y_train, self.A_test, self.y_test = self._get_mnist()
         elif data_set == 'mnist_partial':
             self.A_train, self.y_train, self.A_test, self.y_test = self._get_mnist_partial()
-        elif data_set == 'cifar10':
-            self.A_train, self.y_train, self.A_test, self.y_test = self._get_cifar10()
+        elif data_set == 'syn1':
+            gen = False #set this to True if SYN1 needs to be generated
+            self.A_train, self.y_train, self.A_test, self.y_test = self._get_syn1(gen)
+        elif data_set == 'syn2':
+            gen = False #set this to True if SYN2 needs to be generated
+            self.A_train, self.y_train, self.A_test, self.y_test = self._get_syn2(gen)
         elif data_set == 'breast_cancer':
             self.A_train, self.y_train, self.A_test, self.y_test = self._get_breast_cancer(test_split=test_split)
         else:
@@ -121,7 +125,7 @@ class DataReader:
 
         return x_train_aug, y_train, x_test_aug, y_test
 
-    def _get_syn1(self, generate = True):
+    def _get_syn1(self, generate = False):
         if generate:
             train_exs = 10000
             y_dim = 1000
@@ -157,7 +161,7 @@ class DataReader:
         return np.transpose(x_train), np.transpose(y_train), np.transpose(x_test), np.transpose(y_test)
     
     
-    def _get_syn2(self, generate = True):
+    def _get_syn2(self, generate = False):
         if generate:
             train_exs = 10000
             y_dim = 1000
