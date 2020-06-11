@@ -121,44 +121,77 @@ class DataReader:
 
         return x_train_aug, y_train, x_test_aug, y_test
 
-    def _get_cifar10(self, do_sorting=True):
-        cifar10_train = datasets.CIFAR10(root='./data', download=self.download, train=True)
-        cifar10_test = datasets.CIFAR10(root='./data', download=self.download, train=False)
-
-        x_train = cifar10_train.data/255.0
-        x_test = cifar10_test.data/255.0
-
-        y_train = np.asarray(cifar10_train.targets)
-        y_test = np.asarray(cifar10_test.targets)
-
-        y_train = y_train.reshape(y_train.shape[0], 1)
-        y_test = y_test.reshape(y_test.shape[0], 1)
-
-        # convert to binary labels
-        y_train[y_train < 5] = 0
-        y_train[y_train >= 5] = 1
-        y_test[y_test < 5] = 0
-        y_test[y_test >= 5] = 1
-
-        # Convert to gray-scale
-        x_train = (x_train[:, :, :, 0] + x_train[:, :, :, 1] + x_train[:, :, :, 2])/3.0
-        x_test = (x_test[:, :, :, 0] + x_test[:, :, :, 1] + x_test[:, :, :, 2])/3.0
-        x_train = x_train.reshape(x_train.shape[0], x_train.shape[1]*x_train.shape[2])
-        x_test = x_test.reshape(x_test.shape[0], x_test.shape[1]*x_test.shape[2])
-
-        if do_sorting:
-            y_sorted_ix = np.argsort(y_train)
-            x_train = x_train[y_sorted_ix]
-            y_train = y_train[y_sorted_ix]
-
-        # Now add the Bias term - Add a Fake dim of all 1s to the parameters
-        x_train_aug = np.ones((x_train.shape[0], x_train.shape[1] + 1))
-        x_train_aug[:, 0:x_train.shape[1]] = x_train
-
-        x_test_aug = np.ones((x_test.shape[0], x_test.shape[1] + 1))
-        x_test_aug[:, 0:x_test.shape[1]] = x_test
-
-        return x_train_aug, y_train, x_test_aug, y_test
+    def _get_syn1(self, generate = True):
+        if generate:
+            train_exs = 10000
+            y_dim = 1000
+            x_train = np.random.normal(0.0,1.0,(2*y_dim,train_exs))
+            
+            A = np.random.normal(1.0,1.0,(1,2*y_dim))/np.sqrt(y_dim)
+            noise = np.random.normal(0.0,0.05,(1,train_exs))
+            
+            y_train = np.matmul(A,x_train) + noise
+            
+            # Training set
+            np.save('x_train_SYN1.npy',x_train)
+            np.save('y_train_SYN1.npy',y_train)        
+            
+            test_exs = 5000
+            x_test = np.random.normal(0.0,1.0,(2*y_dim,test_exs))
+            noise = np.random.normal(0.0,0.05,(1,test_exs))
+            
+            y_test = np.matmul(A,x_test) + noise
+            
+            # Test set
+            np.save('x_test_SYN1.npy',x_test)
+            np.save('y_test_SYN1.npy',y_test)
+            
+            print("Generated!")
+            
+        else:
+            x_train = np.load('x_train_SYN1.npy')
+            y_train = np.load('y_train_SYN1.npy')
+            x_test = np.load('x_test_SYN1.npy')
+            y_test = np.load('y_test_SYN1.npy')
+        
+        return np.transpose(x_train), np.transpose(y_train), np.transpose(x_test), np.transpose(y_test)
+    
+    
+    def _get_syn2(self, generate = True):
+        if generate:
+            train_exs = 10000
+            y_dim = 1000
+            x_train = np.random.normal(0.0,1.0,(2*y_dim,train_exs))
+            
+            A = np.random.normal(1.0,1.0,(1,2*y_dim))/np.sqrt(y_dim)
+            noise = np.random.normal(0.0,0.05,(1,train_exs))
+            
+            y_train = np.maximum(np.matmul(A,x_train), 0) + noise
+            
+            # Training set
+            np.save('x_train_SYN2.npy',x_train)
+            np.save('y_train_SYN2.npy',y_train)        
+            
+            test_exs = 5000
+            x_test = np.random.normal(0.0,1.0,(2*y_dim,test_exs))
+            noise = np.random.normal(0.0,0.05,(1,test_exs))
+            
+            y_test = np.maximum(np.matmul(A,x_test), 0) + noise
+            
+            # Test set
+            np.save('x_test_SYN2.npy',x_test)
+            np.save('y_test_SYN2.npy',y_test)
+            
+            print("Generated!")
+            
+        else:
+            x_train = np.load('x_train_SYN2.npy')
+            y_train = np.load('y_train_SYN2.npy')
+            x_test = np.load('x_test_SYN2.npy')
+            y_test = np.load('y_test_SYN2.npy')
+        
+        return np.transpose(x_train), np.transpose(y_train), np.transpose(x_test), np.transpose(y_test)
+    
         
     @staticmethod
     def _get_breast_cancer(test_split, do_sorting=True):
