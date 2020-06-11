@@ -49,7 +49,9 @@ Parameter Options:
     parser.add_argument('--n_proc', type=int, default=3, help='no of parallel processors for Multi-proc')
     parser.add_argument('--n_repeat', type=int, default=3, help='no of times repeat exp with diff seed')
     
-Note: SYN1 , SYN2 are synthetically generated data, So make sure you set the gen=False after generating it for the first time. Please refer to 
+Note: SYN1 , SYN2 are synthetically generated data, 
+So make sure you set the gen=False after generating it for the first time. 
+Please refer to [line](https://github.com/anishacharya/decentralized-opt/blob/6735bf25ed8ea7812f856d3eff90d6c5370ba480/dec_opt/data_reader.py#L20)
 ```
 
 **Supported argument values**
