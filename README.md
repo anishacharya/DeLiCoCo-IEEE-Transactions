@@ -53,11 +53,13 @@ parser.add_argument('--d', type=str, default='breast_cancer',
 **How do I reproduce the plots in the paper?**
 ```
 Check plots.py
+Ex. MNIST
 It has clearly marked code to run Fig1, Fig2, FIg3 for mnist
 ```
 
 **Where are the results stored ?**
 ```
+Ex. For MNIST
 The results of mnist experiments are stored in results/mnist_partial.
 There are 3 folders, Q means experiments with Q, C is Compression, T is Topology.
 The results and parameters are stored as pickle file
@@ -66,6 +68,7 @@ and can be readily consumed by plots.py
 
 **How do I reproduce the results ?**
 ```
+Ex. MNIST
 For all experiments since the parameters are stored in the results folder. (See above FAQ) 
 please run driver.py with these parameters to produce results.
 The results will automatically be stored in pickle files in appropriately 
