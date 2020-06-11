@@ -46,24 +46,6 @@ class DataReader:
         y_test[y_test < 5] = 0
         y_test[y_test >= 5] = 1
 
-        # # for 4 vs. 9
-        # idx_train = np.argwhere(y_train % 5 == 4)
-        # idx_test = np.argwhere(y_test % 5 == 4)
-        #
-        # # for 2 vs. 7
-        # # idx_train = np.argwhere(y_train % 5 == 2)
-        # # idx_test = np.argwhere(y_test % 5 == 2)
-        #
-        # x_train = x_train[idx_train[:, 0], :]
-        # x_test = x_test[idx_test[:, 0], :]
-        #
-        # y_train = y_train[idx_train[:, 0]]
-        # y_train[y_train == 4] = 0
-        # y_train[y_train == 9] = 1
-        # y_test = y_test[idx_test[:, 0]]
-        # y_test[y_test == 4] = 0
-        # y_test[y_test == 9] = 1
-        
         if do_sorting:
             y_sorted_ix = np.argsort(y_train)
             x_train = x_train[y_sorted_ix]
@@ -176,8 +158,8 @@ class DataReader:
             np.save('y_train_SYN2.npy',y_train)        
             
             test_exs = 5000
-            x_test = np.random.normal(0.0,1.0,(2*y_dim,test_exs))
-            noise = np.random.normal(0.0,0.05,(1,test_exs))
+            x_test = np.random.normal(0.0, 1.0, (2*y_dim, test_exs))
+            noise = np.random.normal(0.0, 0.05, (1, test_exs))
             
             y_test = np.maximum(np.matmul(A,x_test), 0) + noise
             
@@ -194,8 +176,7 @@ class DataReader:
             y_test = np.load('y_test_SYN2.npy')
         
         return np.transpose(x_train), np.transpose(y_train), np.transpose(x_test), np.transpose(y_test)
-    
-        
+
     @staticmethod
     def _get_breast_cancer(test_split, do_sorting=True):
         print('Reading Breast Cancer Data')
