@@ -52,11 +52,13 @@ Parameter Options:
 
 **Supported argument values**
 ```
-    --d : 'breast_cancer' || 'mnist' || 'syn1' || 'syn2'
-    --task : 'log_reg' || 'lin_reg' || 'nlin_reg'
-    'log_reg' = Logistic Regression, 'lin_reg' = Linear Regression, 'nlin_reg' = Nonlinear Regression
-    --topology : 'ring' || 'torus' || 'fully_connected' || 'disconnected'
-    --quantization_function : 'full' || 'top' || 'rand' || 'qsgd'
+ --d :    'breast_cancer' || 'mnist' || 'syn1' || 'syn2'
+ --task : 'log_reg' || 'lin_reg' || 'nlin_reg'
+          'log_reg' = Logistic Regression, 
+          'lin_reg' = Linear Regression, 
+          'nlin_reg' = Nonlinear Regression
+ --topology : 'ring' || 'torus' || 'fully_connected' || 'disconnected'
+ --quantization_function : 'full' || 'top' || 'rand' || 'qsgd'
 ```
 
 **How do I reproduce the plots in the paper?**
