@@ -4,6 +4,8 @@ from dec_opt.utils import pickle_it
 from dec_opt.experiment import run_exp
 import numpy as np
 from dec_opt.logistic_regression import LogisticRegression
+from dec_opt.linear_regression import LinearRegression
+from dec_opt.non_linear_regression import NonLinearRegression
 
 
 curr_dir = os.path.dirname(__file__)
@@ -66,6 +68,8 @@ if __name__ == '__main__':
         model = LinearRegression(params=arg)
     elif task == 'nlin_reg':
         model = NonLinearRegression(params=arg)
+    else:
+        raise NotImplementedError
         
     args = []
     results = []
