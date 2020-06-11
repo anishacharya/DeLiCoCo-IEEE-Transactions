@@ -13,6 +13,7 @@ def _parse_args():
     parser = argparse.ArgumentParser(description='driver.py')
     parser.add_argument('--d', type=str, default='breast_cancer',
                         help='Pass data-set')
+    parser.add_argument('--task', type=str, default='log_reg', help='Choose task')
     parser.add_argument('--r', type=str, default=os.path.join(curr_dir, './data/'),
                         help='Pass data root')
     parser.add_argument('--o', type=str, default=None, help='Pass op location')
@@ -59,7 +60,13 @@ if __name__ == '__main__':
         '.c_' + str(arg.quantization_function) + '.f_' + str(arg.fraction_coordinates) +\
         '.p_' + str(arg.dropout_p) + '.b_' + str(arg.num_bits)
 
-    model = LogisticRegression(params=arg)
+    if task == 'log_reg':
+        model = LogisticRegression(params=arg)
+    elif task == 'lin_reg':
+        model = LinearRegression(params=arg)
+    elif task == 'nlin_reg':
+        model = NonLinearRegression(params=arg)
+        
     args = []
     results = []
     for random_seed in np.arange(1, arg.n_repeat + 1):
