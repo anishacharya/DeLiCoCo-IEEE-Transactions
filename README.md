@@ -1,6 +1,6 @@
-# Linearly Convergent Decentralized Learning with Arbitrary Communication Compression
-
-How do I run the Code? 
+# FAQ : DeLiCoCo
+ 
+**How do I run the Code?**
 ```
 A. Install our package: 
 pip3 install decopt
@@ -50,13 +50,24 @@ parser.add_argument('--d', type=str, default='breast_cancer',
 ```
 
 
-How do I reproduce the plots in the paper?
+**How do I reproduce the plots in the paper?**
 ```
 Check plots.py
 It has clearly marked code to run Fig1, Fig2, FIg3 for mnist
 ```
 
-Where are the results stored ?
+**Where are the results stored ?**
 ```
-The results of mnist experiments are stored in results/mnist_partial
+The results of mnist experiments are stored in results/mnist_partial.
+There are 3 folders, Q means experiments with Q, C is Compression, T is Topology.
+The results and parameters are stored as pickle file
+and can be readily consumed by plots.py
+```
+
+**How do I reproduce the results ?**
+```
+For all experiments since the parameters are stored in the results folder. (See above FAQ) 
+please run driver.py with these parameters to produce results.
+The results will automatically be stored in pickle files in appropriately 
+marked folders along with corresponding parameters. 
 ```
