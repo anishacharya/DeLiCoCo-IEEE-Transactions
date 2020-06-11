@@ -54,13 +54,16 @@ Parameter Options:
 ```
     --d : 'breast_cancer' || 'mnist' || 'syn1' || 'syn2'
     --task : 'log_reg' || 'lin_reg' || 'nlin_reg'
+    'log_reg' = Logistic Regression, 'lin_reg' = Linear Regression, 'nlin_reg' = Nonlinear Regression
+    --topology : 'ring' || 'torus' || 'fully_connected' || 'disconnected'
+    --quantization_function : 'full' || 'top' || 'rand' || 'qsgd'
 ```
 
 **How do I reproduce the plots in the paper?**
 ```
 Check plots.py
 Ex. MNIST
-It has clearly marked code to run Fig1, Fig2, FIg3 for mnist
+It has clearly marked code to run Fig1, Fig2, Fig3 for mnist
 ```
 
 **Where are the results stored ?**
