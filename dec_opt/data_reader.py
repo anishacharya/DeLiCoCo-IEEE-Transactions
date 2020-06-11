@@ -17,10 +17,10 @@ class DataReader:
         elif data_set == 'mnist_partial':
             self.A_train, self.y_train, self.A_test, self.y_test = self._get_mnist_partial()
         elif data_set == 'syn1':
-            gen = False #set this to True if SYN1 needs to be generated
+            gen = True #set this to False if SYN1 is already generated once
             self.A_train, self.y_train, self.A_test, self.y_test = self._get_syn1(gen)
         elif data_set == 'syn2':
-            gen = False #set this to True if SYN2 needs to be generated
+            gen = True #set this to False if SYN2 is already generated once
             self.A_train, self.y_train, self.A_test, self.y_test = self._get_syn2(gen)
         elif data_set == 'breast_cancer':
             self.A_train, self.y_train, self.A_test, self.y_test = self._get_breast_cancer(test_split=test_split)
