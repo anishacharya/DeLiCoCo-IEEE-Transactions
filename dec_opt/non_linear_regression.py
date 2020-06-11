@@ -1,7 +1,7 @@
 import numpy as np
 from typing import Dict
 
-class LinearRegression:
+class NonLinearRegression:
     def __init__(self, params):
         self.params = params
 
