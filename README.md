@@ -48,3 +48,15 @@ parser.add_argument('--d', type=str, default='breast_cancer',
     parser.add_argument('--n_proc', type=int, default=3, help='no of parallel processors for Multi-proc')
     parser.add_argument('--n_repeat', type=int, default=3, help='no of times repeat exp with diff seed')
 ```
+
+
+How do I reproduce the plots in the paper?
+```
+Check plots.py
+It has clearly marked code to run Fig1, Fig2, FIg3 for mnist
+```
+
+Where are the results stored ?
+```
+The results of mnist experiments are stored in results/mnist_partial
+```
