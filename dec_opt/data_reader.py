@@ -6,11 +6,6 @@ import numpy as np
 import time
 from sklearn import preprocessing
 
-"""
-Author: Anish Acharya
-Contact: anishacharya@utexas.edu
-"""
-
 
 class DataReader:
     def __init__(self, root: str, data_set: str, download=True, test_split: float = 0.2):

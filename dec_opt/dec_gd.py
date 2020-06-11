@@ -3,11 +3,6 @@ import time
 from dec_opt.gossip_matrix import GossipMatrix
 from dec_opt.compression import Compression
 
-"""
-Author: Anish Acharya
-Contact: anishacharya@utexas.edu
-"""
-
 
 class DecGD:
     def __init__(self, data_reader, hyper_param, model):

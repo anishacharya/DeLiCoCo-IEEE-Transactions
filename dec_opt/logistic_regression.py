@@ -1,10 +1,6 @@
 import numpy as np
 from scipy.sparse import isspmatrix
 from typing import Dict
-"""
-Author: Anish Acharya
-Contact: anishacharya@utexas.edu
-"""
 
 
 class LogisticRegression:

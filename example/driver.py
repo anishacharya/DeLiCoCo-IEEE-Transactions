@@ -5,10 +5,6 @@ from dec_opt.experiment import run_exp
 import numpy as np
 from dec_opt.logistic_regression import LogisticRegression
 
-"""
-Author: Anish Acharya
-Contact: anishacharya@utexas.edu
-"""
 
 curr_dir = os.path.dirname(__file__)
 
