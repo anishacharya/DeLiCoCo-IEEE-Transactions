@@ -62,11 +62,11 @@ if __name__ == '__main__':
         '.c_' + str(arg.quantization_function) + '.f_' + str(arg.fraction_coordinates) +\
         '.p_' + str(arg.dropout_p) + '.b_' + str(arg.num_bits)
 
-    if task == 'log_reg':
+    if arg.task == 'log_reg':
         model = LogisticRegression(params=arg)
-    elif task == 'lin_reg':
+    elif arg.task == 'lin_reg':
         model = LinearRegression(params=arg)
-    elif task == 'nlin_reg':
+    elif arg.task == 'nlin_reg':
         model = NonLinearRegression(params=arg)
     else:
         raise NotImplementedError
