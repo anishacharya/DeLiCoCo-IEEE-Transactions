@@ -134,8 +134,8 @@ class DecGD:
             train_losses[epoch + 1] = self.model.loss(self.A_train, self.y_train)
             test_losses[epoch + 1] = self.model.loss(self.A_test, self.y_test)
 
-            #train_acc = compute_accuracy(model=self.model, feature=self.A_train, target=self.y_train)
-            #test_acc = compute_accuracy(model=self.model, feature=self.A_test, target=self.y_test)
+            # train_acc = compute_accuracy(model=self.model, feature=self.A_train, target=self.y_train)
+            # test_acc = compute_accuracy(model=self.model, feature=self.A_test, target=self.y_test)
             print("epoch : {}; loss: {}".
                   format(epoch, train_losses[epoch + 1]))
             # print("epoch : {}; loss: {}; Test accuracy : {}".format(epoch, test_losses[epoch + 1], test_acc))
@@ -145,10 +145,8 @@ class DecGD:
         print("Training took: {}s".format(time.time() - train_start))
         return train_losses, test_losses
 
-'''
-def compute_accuracy(model, feature, target):
-    pred = model.predict(A=feature)
-    pred_labels = model.classify(predictions=pred)
-    acc = model.accuracy(pred_labels, target)
-    return acc
-'''
+# def compute_accuracy(model, feature, target):
+#     pred = model.predict(A=feature)
+#     pred_labels = model.classify(predictions=pred)
+#     acc = model.accuracy(pred_labels, target)
+#     return acc

@@ -50,7 +50,8 @@ class Compression:
             for i in range(0, q.shape[1]):
                 unif_i = np.random.rand(q.shape[0],)
                 x_i = x[:, i]
-                q[:, i] = ((np.sign(x_i) * np.linalg.norm(x_i))/(s*tau)) * np.floor((s*np.abs(x_i)/np.linalg.norm(x_i)) + unif_i)
+                q[:, i] = ((np.sign(x_i) * np.linalg.norm(x_i))/(s*tau)) * \
+                          np.floor((s*np.abs(x_i)/np.linalg.norm(x_i)) + unif_i)
             return q
         else:
             raise NotImplementedError
