@@ -51,99 +51,51 @@ def plot_loop(data, algorithm: List[str], n_cores: List[int],
 if __name__ == '__main__':
     plt.figure()
     fig = plt.gcf()
-    data_set = 'mnist_partial'
-    optimal_baseline = baselines[data_set]
+    data_set = 'syn2/'
+    # optimal_baseline = baselines[data_set]
 
     # baseline - Gradient Descent Vanilla Centralized
-    baselines = unpickle_dir(d='./results/baselines')
-    repeats_baseline = baselines[data_set + '_gd']
+    # baselines = unpickle_dir(d='./results/baselines')
+    # repeats_baseline = baselines[data_set + '_gd']
     # no communication
-    repeats_disconnected = baselines[data_set + '_dis']
+    # repeats_disconnected = baselines[data_set + '_dis']
 
+
+
+    # Specify what result runs you want to plot together
+    # this is what you need to modify
+
+    # MNIST
+    results_dir = '.'
+    data = unpickle_dir(d='./results/' + data_set + results_dir)
+    plt.title('SYN-2 Comparison with fixed total budget', fontsize=14)
+    plt.subplot(1,2,1)
+    plot_results(repeats=data['a_ours.n_16.t_torus.q_1.lr_0.15.c_top.f_0.25.p_0.1.b_2'],
+                 label='top(25%),Q=1', line_width=4)
+    plot_results(repeats=data['a_ours.n_16.t_torus.q_5.lr_0.15.c_top.f_0.05.p_0.1.b_2'],
+                 label='top(5%),Q=5', line_width=4)
+    plt.legend(fontsize=11)
+    plt.yscale("log")
+    plt.ylim(bottom=5e-3, top=1)
+    plt.xlim(left=0, right=500)
     plt.xlabel('Number of gradient steps', fontsize=14)
     plt.ylabel('Training Sub-optimality', fontsize=14)
     plt.grid(axis='both')
     plt.tick_params(labelsize=12)
 
-    # Specify what result runs you want to plot together
-    # this is what you need to modify
-
-    # Now run to get plots
-
-    # =========================
-    #       Figure - 1
-    # =========================
-    # results_dir = '/paper/Q/'
-    # data = unpickle_dir(d='./results/' + data_set + results_dir)
-    # plot_results(repeats=repeats_disconnected, label='Disconnected',
-    #              optima=optimal_baseline, line_width=3)
-    # plot_loop(data=data, n_cores=[9],
-    #           algorithm=['ours'],
-    #           topology=['torus'],
-    #           Q=[1, 5, 10],
-    #           consensus_lr=[0.9],
-    #           label=['Q=1', 'Q=5', 'Q=10'],
-    #           quantization_func=['top'],
-    #           fraction_coordinates=[0.5],
-    #           dropout_p=[0.5], num_bits=[2],
-    #           optima=optimal_baseline, linestyle=None, line_width=3)
-    # plot_results(repeats=repeats_baseline, label='Centralized',
-    #              optima=optimal_baseline, line_style='dashed', line_width=3)
-    # plt.title('MNIST, Consensus learning rate = 0.9', fontsize=14)
-
-    # =========================
-    #       Figure - 2
-    # =========================
-    # results_dir = '/paper/T/'
-    # data = unpickle_dir(d='./results/' + data_set + results_dir)
-    # plot_loop(data=data, n_cores=[25],
-    #           algorithm=['ours'],
-    #           topology=['ring', 'torus', 'fully_connected'],
-    #           Q=[1],
-    #           consensus_lr=[0.5],
-    #           label=['ring(Q=1)', 'torus(Q=1)', 'fully-connected(Q=1)'],
-    #           quantization_func=['top'],
-    #           fraction_coordinates=[0.5],
-    #           dropout_p=[0.1], num_bits=[2],
-    #           optima=optimal_baseline, linestyle='dashed', line_width=4)
-    #
-    # plot_loop(data=data, n_cores=[25],
-    #           algorithm=['ours'],
-    #           topology=['ring', 'torus', 'fully_connected'],
-    #           Q=[5],
-    #           consensus_lr=[0.5],
-    #           label=['ring(Q=5)', 'torus(Q=5)', 'fully-connected(Q=5)'],
-    #           quantization_func=['top'],
-    #           fraction_coordinates=[0.5],
-    #           dropout_p=[0.1], num_bits=[2],
-    #           optima=optimal_baseline, linestyle=None, line_width=4)
-    #
-    # plot_results(repeats=repeats_baseline, label='Centralized',
-    #              optima=optimal_baseline, line_width=4)
-    # plt.title('MNIST, number of nodes = 25', fontsize=14)
-
-    # =========================
-    #       Figure - 3
-    # =========================
-    # MNIST
-    results_dir = '/paper/C/'
-    data = unpickle_dir(d='./results/' + data_set + results_dir)
-    plot_results(repeats=data['a_ours.n_9.t_torus.q_15.lr_0.1.c_top.f_0.05.p_0.5.b_2'],
-                 label='top (0.05)',
-                 optima=optimal_baseline, line_width=4)
-    plot_results(repeats=data['a_ours.n_9.t_torus.q_15.lr_0.05.c_rand.f_0.05.p_0.5.b_2'],
-                 label='rand (0.05)',
-                 optima=optimal_baseline, line_width=4)
-    plot_results(repeats=data['a_ours.n_9.t_torus.q_10.lr_0.05.c_qsgd.f_0.05.p_0.5.b_2'],
-                 label='qsgd (2 bit)',
-                 optima=optimal_baseline, line_width=4)
-    plot_results(repeats=repeats_baseline, label='exact(DGD)',
-                 optima=optimal_baseline, line_style='dashed', line_width=4)
-    plt.title('MNIST',  fontsize=14)
+    plt.subplot(1, 2, 2)
+    plot_results(repeats=data['a_ours.n_16.t_torus.q_1.lr_0.15.c_qsgd.f_0.05.p_0.1.b_4'],
+                 label='QSGD(4 bit),Q=1', line_width=4, line_style='--')
+    plot_results(repeats=data['a_ours.n_16.t_torus.q_2.lr_0.15.c_qsgd.f_0.05.p_0.1.b_2'],
+                 label='QSGD(2 bit),Q=2', line_width=4, line_style='--')
 
     plt.legend(fontsize=11)
     plt.yscale("log")
     plt.ylim(bottom=5e-3, top=1)
-    plt.xlim(left=0, right=5000)
+    plt.xlim(left=0, right=500)
+    plt.xlabel('Number of gradient steps', fontsize=14)
+    # plt.ylabel('Training Sub-optimality', fontsize=14)
+    plt.grid(axis='both')
+    plt.tick_params(labelsize=12)
 
     plt.show()

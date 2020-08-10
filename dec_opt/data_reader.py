@@ -20,7 +20,7 @@ class DataReader:
             gen = True  # set this to False if SYN1 is already generated once
             self.A_train, self.y_train, self.A_test, self.y_test = self._get_syn1(gen)
         elif data_set == 'syn2':
-            gen = True  # set this to False if SYN2 is already generated once
+            gen = False  # set this to False if SYN2 is already generated once
             self.A_train, self.y_train, self.A_test, self.y_test = self._get_syn2(gen)
         elif data_set == 'breast_cancer':
             self.A_train, self.y_train, self.A_test, self.y_test = self._get_breast_cancer(test_split=test_split)
@@ -107,7 +107,7 @@ class DataReader:
 
         return x_train_aug, y_train, x_test_aug, y_test
 
-    def _get_syn1(self, generate=False):
+    def _get_syn1(self, generate=True):
         if generate:
             train_exs = 10000
             y_dim = 1000
@@ -142,7 +142,7 @@ class DataReader:
         
         return np.transpose(x_train), np.transpose(y_train), np.transpose(x_test), np.transpose(y_test)
 
-    def _get_syn2(self, generate=False):
+    def _get_syn2(self, generate=True):
         if generate:
             train_exs = 10000
             y_dim = 1000

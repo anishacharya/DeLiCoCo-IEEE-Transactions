@@ -13,36 +13,36 @@ curr_dir = os.path.dirname(__file__)
 
 def _parse_args():
     parser = argparse.ArgumentParser(description='driver.py')
-    parser.add_argument('--d', type=str, default='breast_cancer',
+    parser.add_argument('--d', type=str, default='syn2',
                         help='Pass data-set')
-    parser.add_argument('--task', type=str, default='log_reg', help='Choose task')
+    parser.add_argument('--task', type=str, default='nlin_reg', help='Choose task')
     parser.add_argument('--r', type=str, default=os.path.join(curr_dir, './data/'),
                         help='Pass data root')
     parser.add_argument('--o', type=str, default=None, help='Pass op location')
 
     parser.add_argument('--stochastic', type=bool, default=False)
     parser.add_argument('--algorithm', type=str, default='ours')
-    parser.add_argument('--n_cores', type=int, default=9)
-    parser.add_argument('--topology', type=str, default='ring')
+    parser.add_argument('--n_cores', type=int, default=16)
+    parser.add_argument('--topology', type=str, default='torus')
 
-    parser.add_argument('--Q', type=int, default=2)
+    parser.add_argument('--Q', type=int, default=1)
 
-    parser.add_argument('--consensus_lr', type=float, default=0.3)
+    parser.add_argument('--consensus_lr', type=float, default=0.15)
 
-    parser.add_argument('--quantization_function', type=str, default='full')
-    parser.add_argument('--num_bits', type=int, default=2)
-    parser.add_argument('--fraction_coordinates', type=float, default=0.1)
+    parser.add_argument('--quantization_function', type=str, default='qsgd')
+    parser.add_argument('--num_bits', type=int, default=4)
+    parser.add_argument('--fraction_coordinates', type=float, default=0.05)
     parser.add_argument('--dropout_p', type=float, default=0.1)
 
-    parser.add_argument('--epochs', type=int, default=1500)
+    parser.add_argument('--epochs', type=int, default=500)
     parser.add_argument('--lr_type', type=str, default='constant')
-    parser.add_argument('--initial_lr', type=float, default=0.001)
+    parser.add_argument('--initial_lr', type=float, default=0.2)
     parser.add_argument('--epoch_decay_lr', type=float, default=0.9)
-    parser.add_argument('--regularizer', type=float, default=0)
+    parser.add_argument('--regularizer', type=float, default=0.001)
 
     parser.add_argument('--estimate', type=str, default='final')
     parser.add_argument('--n_proc', type=int, default=3)
-    parser.add_argument('--n_repeat', type=int, default=3)
+    parser.add_argument('--n_repeat', type=int, default=1)
     parser.add_argument('--seed', type=int, default=1)
     args = parser.parse_args()
     return args
