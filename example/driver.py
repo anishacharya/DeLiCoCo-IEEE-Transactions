@@ -27,15 +27,15 @@ def _parse_args():
 
     parser.add_argument('--Q', type=int, default=1)
 
-    parser.add_argument('--consensus_lr', type=float, default=0.15)
+    parser.add_argument('--consensus_lr', type=float, default=0.05)
 
     parser.add_argument('--quantization_function', type=str, default='qsgd')
-    parser.add_argument('--num_bits', type=int, default=4)
+    parser.add_argument('--num_bits', type=int, default=8)
     parser.add_argument('--fraction_coordinates', type=float, default=0.05)
     parser.add_argument('--dropout_p', type=float, default=0.1)
 
     parser.add_argument('--epochs', type=int, default=500)
-    parser.add_argument('--lr_type', type=str, default='constant')
+    parser.add_argument('--lr_type', type=str, default='epoch_decay')
     parser.add_argument('--initial_lr', type=float, default=0.2)
     parser.add_argument('--epoch_decay_lr', type=float, default=0.9)
     parser.add_argument('--regularizer', type=float, default=0.001)

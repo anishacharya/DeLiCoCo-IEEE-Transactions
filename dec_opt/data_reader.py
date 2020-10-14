@@ -142,7 +142,7 @@ class DataReader:
         
         return np.transpose(x_train), np.transpose(y_train), np.transpose(x_test), np.transpose(y_test)
 
-    def _get_syn2(self, generate=True):
+    def _get_syn2(self, generate=False):
         if generate:
             train_exs = 10000
             y_dim = 1000
@@ -161,7 +161,7 @@ class DataReader:
             x_test = np.random.normal(0.0, 1.0, (2*y_dim, test_exs))
             noise = np.random.normal(0.0, 0.05, (1, test_exs))
             
-            y_test = np.maximum(np.matmul(A,x_test), 0) + noise
+            y_test = np.maximum(np.matmul(A, x_test), 0) + noise
             
             # Test set
             np.save('x_test_SYN2.npy',x_test)
