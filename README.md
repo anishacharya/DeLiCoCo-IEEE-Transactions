@@ -1,4 +1,6 @@
 # On the Benefits of Multiple Gossip Steps in Communication-Constrained Decentralized Optimization
+Abstract:
+------------
 In decentralized optimization, it is common algorithmic practice to have nodes interleave
 (local) gradient descent iterations with gossip (i.e. averaging over the network) steps.
 Motivated by the training of large-scale machine learning models, it is also increasingly
