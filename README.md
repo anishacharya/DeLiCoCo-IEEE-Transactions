@@ -1,5 +1,16 @@
 # FAQ : DeLi-CoCo
- 
+
+**Citation**.  
+Kindly cite the following work:    
+```
+@article{hashemi2020benefits,
+  title={On the benefits of multiple gossip steps in communication-constrained decentralized optimization},
+  author={Hashemi, Abolfazl and Acharya, Anish and Das, Rudrajit and Vikalo, Haris and Sanghavi, Sujay and Dhillon, Inderjit},
+  journal={arXiv preprint arXiv:2011.10643},
+  year={2020}
+}
+```
+
 **How do I run the Code?**
 ```
 A. Install our package: 
