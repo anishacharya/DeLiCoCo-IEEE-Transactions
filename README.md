@@ -1,4 +1,5 @@
-# On the Benefits of Multiple Gossip Steps in Communication-Constrained Decentralized Optimization
+On the Benefits of Multiple Gossip Steps in Communication-Constrained Decentralized Optimization
+=================================================================================
 Abstract:
 ------------
 In decentralized optimization, it is common algorithmic practice to have nodes interleave
@@ -15,9 +16,12 @@ satisfying Polyak-Łojasiewicz condition. This result also holds for smooth stro
 objectives. To our knowledge, this is the first work that derives convergence results for
 nonconvex optimization under arbitrary communication compression     
 
-# FAQ : DeLi-CoCo
 
-**Citation**.  
+FAQ : DeLi-CoCo
+------------
+
+Citation  
+------------
 Kindly cite the following work:    
 ```
 @article{hashemi2020benefits,
@@ -28,7 +32,8 @@ Kindly cite the following work:
 }
 ```
 
-**How do I run the Code?**
+How do I run the Code?
+------------
 ```
 A. Install our package: 
 pip3 install decopt
@@ -82,7 +87,8 @@ So make sure you set gen=False after generating them for the first time.
 Please refer to line 20, 23 of data_reader.py
 ```
 
-**Supported argument values**
+Supported argument values
+------------
 ```
  --d :    'breast_cancer' || 'mnist' || 'syn1' || 'syn2'
  --task : 'log_reg' || 'lin_reg' || 'nlin_reg'
@@ -93,14 +99,16 @@ Please refer to line 20, 23 of data_reader.py
  --quantization_function : 'full' || 'top' || 'rand' || 'qsgd'
 ```
 
-**How do I reproduce the plots in the paper?**
+How do I reproduce the plots in the paper?
+------------
 ```
 Check plots.py
 Ex. MNIST
 It has clearly marked code to run Fig1, Fig2, Fig3 for mnist
 ```
 
-**Where are the results stored ?**
+Where are the results stored ?
+------------
 ```
 Ex. For MNIST
 The results of mnist experiments are stored in results/mnist_partial.
@@ -109,7 +117,8 @@ The results and parameters are stored as pickle file
 and can be readily consumed by plots.py
 ```
 
-**How do I reproduce the results ?**
+How do I reproduce the results ?
+------------
 ```
 Ex. MNIST
 For all experiments since the parameters are stored in the results folder. (See above FAQ) 
