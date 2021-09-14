@@ -1,5 +1,7 @@
-On the Benefits of Multiple Gossip Steps in Communication-Constrained Decentralized Optimization
+[On the Benefits of Multiple Gossip Steps in Communication-Constrained Decentralized Optimization](https://arxiv.org/pdf/2011.10643.pdf)
 =================================================================================
+Abolfazl Hashemi, Anish Acharya, Rudrajit Das, Haris Vikalo, Sujay Sanghavi, Inderjit Dhillon.  
+
 Abstract:
 ------------
 In decentralized optimization, it is common algorithmic practice to have nodes interleave
