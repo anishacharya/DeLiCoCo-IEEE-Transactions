@@ -17,6 +17,12 @@ enables convergence to within <sub>&epsilon;</sub> of the optimal value for smoo
 satisfying Polyak-Łojasiewicz condition. This result also holds for smooth strongly convex
 objectives. To our knowledge, this is the first work that derives convergence results for
 nonconvex optimization under arbitrary communication compression     
+
+
+![](https://github.com/anishacharya/DeLiCoCo/blob/master/algo_delicoco.png)
+![](https://github.com/anishacharya/DeLiCoCo/blob/master/fig_1_delicoco.png)
+![](https://github.com/anishacharya/DeLiCoCo/blob/master/fig_2_delicoco.png)
+
 ![](https://github.com/anishacharya/DeLiCoCo/blob/master/table_delicoco.png)
 
 FAQ : DeLi-CoCo
