@@ -30,7 +30,7 @@ FAQ : DeLi-CoCo
 
 Citation  
 ------------
-Kindly cite the following work:    
+If you find this useful for your research consider giving a :star2: and citing the following article:    
 ```
 @article{hashemi2020benefits,
   title={On the benefits of multiple gossip steps in communication-constrained decentralized optimization},
