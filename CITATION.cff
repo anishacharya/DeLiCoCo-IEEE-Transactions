@@ -3,7 +3,7 @@ message: "If you use this software, please cite it as below."
 authors:
 - family-names: "Acharya"
   given-names: "Anish"
-  orcid: "https://orcid.org/0000-0000-0000-0000"
+  scholar: "https://scholar.google.co.in/citations?user=uBmgGMAAAAAJ&hl=en"
 title: "DeLiCoCo"
 version: 1.0.0
 doi: 10.5281/zenodo.1234
