@@ -4,6 +4,9 @@ authors:
 - family-names: "Acharya"
   given-names: "Anish"
   scholar: "https://scholar.google.co.in/citations?user=uBmgGMAAAAAJ&hl=en"
+- family-names: "Das"
+  given-names: "Rudrajit"
+  scholar: "https://scholar.google.co.in/citations?user=L5K4mJMAAAAJ&hl=en"
 title: "DeLiCoCo"
 version: 1.0.0
 doi: 10.5281/zenodo.1234
