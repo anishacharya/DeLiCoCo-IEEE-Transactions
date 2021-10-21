@@ -30,7 +30,7 @@ FAQ : DeLi-CoCo
 
 Citation  
 ------------
-If you find this useful for your research consider giving a :star2: and citing the following article:    
+If you find this useful for your research consider citing the following article:    
 ```
 @article{hashemi2020benefits,
   title={On the benefits of multiple gossip steps in communication-constrained decentralized optimization},
@@ -39,7 +39,10 @@ If you find this useful for your research consider giving a :star2: and citing t
   year={2020}
 }
 ```
-
+If you find the code useful, consider giving a :star2: and cite the following:
+```
+@software{Acharya_DeLiCoCo_2021,author = {Acharya, Anish and Das, Rudrajit},doi = {10.5281/zenodo.1234},month = {10},title = {{DeLiCoCo}},url = {https://github.com/anishacharya/DeLiCoCo},version = {1.0.0},year = {2021}}
+```
 How do I run the Code?
 ------------
 ```
