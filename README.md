@@ -1,6 +1,7 @@
-[On the Benefits of Multiple Gossip Steps in Communication-Constrained Decentralized Optimization](https://arxiv.org/pdf/2011.10643.pdf)
-=================================================================================
-Abolfazl Hashemi, Anish Acharya, Rudrajit Das, Haris Vikalo, Sujay Sanghavi, Inderjit Dhillon.  
+[On the Benefits of Multiple Gossip Steps in Communication-Constrained Decentralized Federated Learning](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=9664349)
+=================================================================================  
+Published in [IEEE Transactions on Parallel and Distributed Systems](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=9664349).  
+[Abolfazl Hashemi](https://abolfazlh.github.io/), [Anish Acharya](https://anishacharya.github.io/), [Rudrajit Das](https://rudrajit15.github.io/), Haris Vikalo, Sujay Sanghavi, Inderjit Dhillon.  
 
 Abstract:
 ------------
